@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
-  // =========================================
+  // ===============================
   // CORS
-  // =========================================
+  // ===============================
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -34,9 +34,9 @@ export default async function handler(req, res) {
       });
     }
 
-    // =========================================
+    // ===============================
     // VALIDATE URL
-    // =========================================
+    // ===============================
 
     let targetURL;
 
@@ -49,18 +49,17 @@ export default async function handler(req, res) {
       });
     }
 
-    // =========================================
-    // AHM7 API
-    // =========================================
+    // ===============================
+    // AHM7X
+    // ===============================
 
     const apiURL =
       "https://ahm7xmakki.com/api/alldl?url=" +
       encodeURIComponent(targetURL);
 
     const apiResponse = await fetch(apiURL, {
-      method: "GET",
       headers: {
-        "User-Agent": "Gallehs-Project/1.0",
+        "User-Agent": "Mozilla/5.0",
         "Accept": "application/json"
       }
     });
@@ -73,46 +72,51 @@ export default async function handler(req, res) {
       });
     }
 
+    // ===============================
+    // CHECK JSON
+    // ===============================
+
+    const contentType =
+      apiResponse.headers.get("content-type") || "";
+
+    if (!contentType.includes("application/json")) {
+      return res.status(502).json({
+        success: false,
+        message: "API downloader tidak mengembalikan JSON."
+      });
+    }
+
     const data = await apiResponse.json();
 
-    // =========================================
-    // CHECK RESPONSE
-    // =========================================
+    // ===============================
+    // RESPONSE
+    // ===============================
 
     if (!data || data.success !== true) {
       return res.status(400).json({
         success: false,
         message:
           data?.message ||
-          "Media gagal diproses oleh API."
+          "Media gagal diproses."
       });
     }
 
-    const media = data.mediaInfo || {};
+    const media =
+      data.mediaInfo || {};
 
     const videoUrl =
-      media.videoUrl ||
-      null;
+      media.videoUrl || null;
 
     const audioUrl =
-      media.audioUrl ||
-      null;
-
-    const thumbnail =
-      media.thumbnail ||
-      "";
+      media.audioUrl || null;
 
     const title =
       media.title ||
-      "Media";
+      "gallehs-video";
 
-    const platform =
-      media.platform ||
-      "Unknown";
-
-    // =========================================
-    // DOWNLOAD URL
-    // =========================================
+    // ===============================
+    // MEDIA URL
+    // ===============================
 
     const fileUrl =
       videoUrl || audioUrl;
@@ -121,74 +125,78 @@ export default async function handler(req, res) {
       return res.status(404).json({
         success: false,
         message:
-          "URL media tidak ditemukan dari API."
+          "URL video tidak ditemukan."
       });
     }
 
-    // =========================================
-    // AMBIL FILE DARI CDN
-    // =========================================
+    // ===============================
+    // FETCH VIDEO
+    // ===============================
 
-    const fileResponse = await fetch(fileUrl, {
-      method: "GET",
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "*/*"
-      }
-    });
+    const fileResponse =
+      await fetch(fileUrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0",
+          "Accept": "*/*"
+        }
+      });
 
     if (!fileResponse.ok) {
       return res.status(502).json({
         success: false,
         message:
-          `Gagal mengambil file media (${fileResponse.status}).`
+          `Gagal mengambil video (${fileResponse.status}).`
       });
     }
 
-    // =========================================
-    // CONTENT TYPE
-    // =========================================
+    const buffer =
+      Buffer.from(
+        await fileResponse.arrayBuffer()
+      );
 
-    const contentType =
-      fileResponse.headers.get("content-type") ||
-      (videoUrl
-        ? "video/mp4"
-        : "audio/mpeg");
+    if (!buffer.length) {
+      return res.status(502).json({
+        success: false,
+        message: "File video kosong."
+      });
+    }
 
-    // =========================================
+    // ===============================
     // FILENAME
-    // =========================================
+    // ===============================
 
-    let safeTitle =
+    const safeTitle =
       String(title)
         .replace(/[\\/:*?"<>|]/g, "")
         .replace(/\s+/g, " ")
-        .trim();
-
-    if (!safeTitle) {
-      safeTitle = "gallehs-media";
-    }
+        .trim()
+        .slice(0, 80) ||
+      "gallehs-video";
 
     const extension =
-      contentType.includes("audio")
+      audioUrl && !videoUrl
         ? "mp3"
         : "mp4";
 
-    const filename =
-      `${safeTitle}.${extension}`;
-
-    // =========================================
-    // DOWNLOAD HEADER
-    // =========================================
+    // ===============================
+    // FORCE DOWNLOAD
+    // ===============================
 
     res.setHeader(
       "Content-Type",
-      contentType
+      extension === "mp3"
+        ? "audio/mpeg"
+        : "video/mp4"
     );
 
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename="${filename}"`
+      `attachment; filename="${safeTitle}.${extension}"`
+    );
+
+    res.setHeader(
+      "Content-Length",
+      buffer.length
     );
 
     res.setHeader(
@@ -196,19 +204,10 @@ export default async function handler(req, res) {
       "no-store"
     );
 
-    // =========================================
-    // KIRIM FILE
-    // =========================================
-
-    const arrayBuffer =
-      await fileResponse.arrayBuffer();
-
-    const buffer =
-      Buffer.from(arrayBuffer);
-
     return res.status(200).send(buffer);
 
   } catch (error) {
+
     console.error(
       "GALLEHS DOWNLOAD ERROR:",
       error
@@ -217,8 +216,7 @@ export default async function handler(req, res) {
     return res.status(500).json({
       success: false,
       message:
-        "Terjadi kesalahan saat download.",
-      error: error.message
+        "Terjadi kesalahan saat download."
     });
   }
 }
