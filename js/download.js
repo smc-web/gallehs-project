@@ -1,94 +1,152 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const input =
+  const urlInput =
     document.getElementById("download-url");
 
-  const paste =
+  const pasteButton =
     document.getElementById("paste-button");
 
-  const button =
+  const downloadButton =
     document.getElementById("download-button");
 
   const message =
     document.getElementById("download-message");
 
-  const result =
+  const resultBox =
     document.getElementById("download-result");
 
-  const platforms =
-    document.querySelectorAll(".platform-button");
+  const platformButtons =
+    document.querySelectorAll(
+      ".platform-button"
+    );
 
-  let selected = "auto";
-  let loading = false;
+  let selectedPlatform = "auto";
+  let processing = false;
 
 
-  function msg(text) {
+  // =========================================
+  // MESSAGE
+  // =========================================
+
+  function showMessage(text) {
+
     if (message) {
       message.textContent = text;
     }
+
   }
 
 
-  function detect(url) {
+  // =========================================
+  // DETECT PLATFORM
+  // =========================================
 
-    const u = url.toLowerCase();
+  function detectPlatform(url) {
 
-    if (u.includes("tiktok.com"))
+    const value =
+      url.toLowerCase();
+
+
+    if (
+      value.includes("tiktok.com")
+    ) {
       return "tiktok";
+    }
+
 
     if (
-      u.includes("spotify.com") ||
-      u.includes("spotify.link")
-    )
+      value.includes("spotify.com") ||
+      value.includes("spotify.link")
+    ) {
       return "spotify";
+    }
+
 
     if (
-      u.includes("youtube.com") ||
-      u.includes("youtu.be")
-    )
+      value.includes("youtube.com") ||
+      value.includes("youtu.be")
+    ) {
       return "youtube";
+    }
+
 
     if (
-      u.includes("instagram.com") ||
-      u.includes("instagr.am")
-    )
+      value.includes("instagram.com") ||
+      value.includes("instagr.am")
+    ) {
       return "instagram";
+    }
+
 
     if (
-      u.includes("facebook.com") ||
-      u.includes("fb.watch")
-    )
+      value.includes("facebook.com") ||
+      value.includes("fb.watch")
+    ) {
       return "facebook";
+    }
+
 
     return null;
+
   }
 
 
-  platforms.forEach(btn => {
+  // =========================================
+  // PLATFORM BUTTON
+  // =========================================
 
-    btn.addEventListener("click", () => {
+  platformButtons.forEach(button => {
 
-      platforms.forEach(x =>
-        x.classList.remove("active")
-      );
+    button.addEventListener(
+      "click",
+      () => {
 
-      btn.classList.add("active");
+        platformButtons.forEach(item => {
 
-      selected =
-        btn.dataset.platform || "auto";
+          item.classList.remove(
+            "active"
+          );
 
-      msg(
-        selected === "auto"
-          ? "Platform otomatis."
-          : `Platform: ${selected}`
-      );
+        });
 
-    });
+
+        button.classList.add(
+          "active"
+        );
+
+
+        selectedPlatform =
+          button.dataset.platform ||
+          "auto";
+
+
+        if (
+          selectedPlatform === "auto"
+        ) {
+
+          showMessage(
+            "Platform otomatis."
+          );
+
+        } else {
+
+          showMessage(
+            `Platform: ${selectedPlatform}`
+          );
+
+        }
+
+      }
+    );
 
   });
 
 
-  paste?.addEventListener(
+  // =========================================
+  // PASTE
+  // =========================================
+
+  pasteButton?.addEventListener(
     "click",
     async () => {
 
@@ -97,26 +155,46 @@ document.addEventListener("DOMContentLoaded", () => {
         const text =
           await navigator.clipboard.readText();
 
+
         if (!text) {
-          msg("Clipboard kosong.");
+
+          showMessage(
+            "Clipboard kosong."
+          );
+
           return;
+
         }
 
-        input.value = text;
+
+        urlInput.value =
+          text;
+
 
         const platform =
-          detect(text);
+          detectPlatform(text);
 
-        msg(
-          platform
-            ? `Link ${platform} terdeteksi.`
-            : "Link berhasil ditempel."
-        );
 
-      } catch {
+        if (platform) {
 
-        msg(
-          "Gagal membaca clipboard."
+          showMessage(
+            `Link ${platform} terdeteksi.`
+          );
+
+        } else {
+
+          showMessage(
+            "Link berhasil ditempel."
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+          "Tidak bisa membaca clipboard. Tempel link secara manual."
         );
 
       }
@@ -125,155 +203,257 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  button?.addEventListener(
+  // =========================================
+  // DOWNLOAD
+  // =========================================
+
+  downloadButton?.addEventListener(
     "click",
     async () => {
 
-      if (loading) return;
+      if (processing) {
+        return;
+      }
+
 
       const url =
-        input.value.trim();
+        urlInput.value.trim();
+
 
       if (!url) {
-        msg(
+
+        showMessage(
           "Masukkan link terlebih dahulu."
         );
+
+        urlInput.focus();
+
         return;
+
       }
 
-      if (!/^https?:\/\//i.test(url)) {
-        msg("Link tidak valid.");
-        return;
-      }
 
-      let platform = selected;
+      if (
+        !/^https?:\/\//i.test(url)
+      ) {
 
-      if (platform === "auto") {
-        platform = detect(url);
-      }
-
-      if (!platform) {
-        msg(
-          "Platform tidak didukung."
+        showMessage(
+          "Link tidak valid."
         );
+
         return;
+
       }
+
+
+      let platform =
+        selectedPlatform;
+
+
+      if (
+        platform === "auto"
+      ) {
+
+        platform =
+          detectPlatform(url);
+
+
+        if (!platform) {
+
+          showMessage(
+            "Platform tidak didukung."
+          );
+
+          return;
+
+        }
+
+      }
+
+
+      // =========================================
+      // COMING SOON
+      // =========================================
 
       if (
         platform === "youtube" ||
         platform === "instagram" ||
         platform === "facebook"
       ) {
-        msg(
+
+        showMessage(
           `${platform} masih Coming Soon.`
         );
+
         return;
+
       }
 
-      loading = true;
 
-      if (result) {
-        result.hidden = true;
+      processing = true;
+
+
+      if (resultBox) {
+        resultBox.hidden = true;
       }
 
-      button.disabled = true;
 
-      button.innerHTML =
+      downloadButton.disabled =
+        true;
+
+
+      downloadButton.innerHTML =
         "<span>⟳</span> Processing...";
 
-      msg(
+
+      showMessage(
         `Memproses ${platform}...`
       );
 
+
       try {
+
+        // =====================================
+        // CALL BACKEND
+        // =====================================
 
         const response =
           await fetch(
             "/api/download",
             {
+
               method: "POST",
 
               headers: {
+
                 "Content-Type":
                   "application/json"
+
               },
 
-              body: JSON.stringify({
-                url,
-                platform
-              })
+              body:
+                JSON.stringify({
+
+                  url:
+                    url,
+
+                  platform:
+                    platform
+
+                })
+
             }
           );
 
-        const data =
-          await response.json();
+
+        let data = {};
+
+
+        try {
+
+          data =
+            await response.json();
+
+        } catch {
+
+          throw new Error(
+            "Response server bukan JSON."
+          );
+
+        }
+
 
         console.log(
           "DOWNLOAD RESPONSE:",
           data
         );
 
-        if (!response.ok ||
-            !data.success) {
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
 
           throw new Error(
             data.message ||
-            "Download gagal."
+            "Media gagal diproses."
           );
+
         }
 
-        if (!data.downloadUrl) {
+
+        if (
+          !data.downloadUrl
+        ) {
+
           throw new Error(
             "URL media tidak ditemukan."
           );
+
         }
 
 
-        // ==========================
-        // DOWNLOAD
-        // ==========================
+        // =====================================
+        // DIRECT DOWNLOAD
+        // =====================================
 
-        const a =
+        const link =
           document.createElement("a");
 
-        a.href =
+
+        link.href =
           data.downloadUrl;
 
-        a.download =
+
+        link.download =
           data.filename ||
           (
             platform === "spotify"
               ? "spotify-audio.mp3"
-              : "tiktok-video.mp4"
+              : "tiktok-video-no-wm.mp4"
           );
 
-        a.target = "_blank";
 
-        a.rel =
+        link.target =
+          "_blank";
+
+
+        link.rel =
           "noopener noreferrer";
 
-        a.style.display = "none";
 
-        document.body.appendChild(a);
-
-        a.click();
-
-        a.remove();
+        link.style.display =
+          "none";
 
 
-        // ==========================
-        // SUCCESS
-        // ==========================
+        document.body.appendChild(
+          link
+        );
 
-        if (platform === "tiktok") {
 
-          msg(
+        link.click();
+
+
+        link.remove();
+
+
+        // =====================================
+        // SUCCESS MESSAGE
+        // =====================================
+
+        if (
+          platform === "tiktok"
+        ) {
+
+          showMessage(
             "Berhasil! Download Video Tanpa WM"
           );
 
-        } else {
+        } else if (
+          platform === "spotify"
+        ) {
 
-          msg(
+          showMessage(
             "Berhasil! Download Audio Spotify"
           );
 
@@ -286,18 +466,23 @@ document.addEventListener("DOMContentLoaded", () => {
           error
         );
 
-        msg(
+
+        showMessage(
           error.message ||
           "Gagal mengunduh media."
         );
 
       } finally {
 
-        loading = false;
+        processing =
+          false;
 
-        button.disabled = false;
 
-        button.innerHTML =
+        downloadButton.disabled =
+          false;
+
+
+        downloadButton.innerHTML =
           "<span>↓</span> Download";
 
       }
@@ -306,13 +491,22 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  input?.addEventListener(
-    "keydown",
-    e => {
+  // =========================================
+  // ENTER
+  // =========================================
 
-      if (e.key === "Enter") {
-        e.preventDefault();
-        button?.click();
+  urlInput?.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        event.preventDefault();
+
+        downloadButton?.click();
+
       }
 
     }
