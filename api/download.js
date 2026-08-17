@@ -1,4 +1,8 @@
 export default async function handler(req, res) {
+  // =========================================
+  // CORS
+  // =========================================
+
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -12,6 +16,10 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
+
+  // =========================================
+  // METHOD
+  // =========================================
 
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -30,6 +38,10 @@ export default async function handler(req, res) {
       });
     }
 
+    // =========================================
+    // VALIDATE URL
+    // =========================================
+
     let targetURL;
 
     try {
@@ -42,20 +54,26 @@ export default async function handler(req, res) {
     }
 
     const hostname =
-      new URL(targetURL).hostname.toLowerCase();
+      new URL(targetURL)
+        .hostname
+        .toLowerCase();
 
-    let selected = platform || "auto";
+    // =========================================
+    // DETECT PLATFORM
+    // =========================================
 
-    // ================================
-    // AUTO DETECT
-    // ================================
+    let selected =
+      platform || "auto";
 
     if (selected === "auto") {
 
       if (hostname.includes("tiktok.com")) {
         selected = "tiktok";
 
-      } else if (hostname.includes("spotify.com")) {
+      } else if (
+        hostname.includes("spotify.com") ||
+        hostname.includes("spotify.link")
+      ) {
         selected = "spotify";
 
       } else if (
@@ -81,9 +99,9 @@ export default async function handler(req, res) {
       }
     }
 
-    // ================================
+    // =========================================
     // UNSUPPORTED
-    // ================================
+    // =========================================
 
     if (!selected) {
       return res.status(400).json({
@@ -92,9 +110,9 @@ export default async function handler(req, res) {
       });
     }
 
-    // ================================
+    // =========================================
     // COMING SOON
-    // ================================
+    // =========================================
 
     if (
       selected === "youtube" ||
@@ -108,9 +126,10 @@ export default async function handler(req, res) {
       });
     }
 
-    // ================================
+    // =========================================
     // TIKTOK
-    // ================================
+    // TETAP SEPERTI YANG SUDAH WORK
+    // =========================================
 
     if (selected === "tiktok") {
 
@@ -120,6 +139,7 @@ export default async function handler(req, res) {
 
       const response =
         await fetch(apiURL, {
+          method: "GET",
           headers: {
             Accept: "application/json"
           }
@@ -136,18 +156,17 @@ export default async function handler(req, res) {
       const data =
         await response.json();
 
-      if (data?.status !== true) {
+      if (!data || data.status !== true) {
         return res.status(400).json({
           success: false,
           message:
-            "TikTok gagal diproses."
+            "TikTok gagal diproses oleh API."
         });
       }
 
       const result =
         data.result || {};
 
-      // API All-In-One menggunakan media
       const media =
         Array.isArray(result.media)
           ? result.media
@@ -155,7 +174,6 @@ export default async function handler(req, res) {
 
       let videoUrl = null;
 
-      // Cari URL dari media
       for (const item of media) {
 
         if (typeof item === "string") {
@@ -175,22 +193,17 @@ export default async function handler(req, res) {
             item.videoUrl ||
             null;
 
-          if (videoUrl) break;
+          if (videoUrl) {
+            break;
+          }
         }
       }
-
-      // ================================
-      // MEDIA KOSONG
-      // ================================
 
       if (!videoUrl) {
         return res.status(404).json({
           success: false,
           message:
-            "API TikTok tidak memberikan URL video.",
-          platform: "tiktok",
-          apiStatus: data.status,
-          mediaCount: media.length
+            "URL video TikTok tidak ditemukan dari API."
         });
       }
 
@@ -205,6 +218,10 @@ export default async function handler(req, res) {
         author:
           result.author ||
           result.username ||
+          "-",
+
+        duration:
+          result.duration ||
           "-",
 
         thumbnail:
@@ -222,11 +239,16 @@ export default async function handler(req, res) {
       });
     }
 
-    // ================================
+    // =========================================
     // SPOTIFY
-    // ================================
+    // API → PROXY → BROWSER
+    // =========================================
 
     if (selected === "spotify") {
+
+      // -----------------------------------------
+      // Ambil URL download dari API Spotify
+      // -----------------------------------------
 
       const apiURL =
         "https://elysian-api.vercel.app/api/downloader/spotify-dl.php?url=" +
@@ -234,6 +256,7 @@ export default async function handler(req, res) {
 
       const response =
         await fetch(apiURL, {
+          method: "GET",
           headers: {
             Accept: "application/json"
           }
@@ -250,21 +273,11 @@ export default async function handler(req, res) {
       const data =
         await response.json();
 
-      if (data?.status !== true) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Spotify gagal diproses."
-        });
-      }
-
-      const metadata =
-        data.metadata || {};
-
-      const downloadUrl =
-        data.download_url;
-
-      if (!downloadUrl) {
+      if (
+        !data ||
+        data.status !== true ||
+        !data.download_url
+      ) {
         return res.status(404).json({
           success: false,
           message:
@@ -272,7 +285,14 @@ export default async function handler(req, res) {
         });
       }
 
-      const song =
+      // -----------------------------------------
+      // Metadata
+      // -----------------------------------------
+
+      const metadata =
+        data.metadata || {};
+
+      const songName =
         metadata.name ||
         "Spotify Audio";
 
@@ -281,34 +301,103 @@ export default async function handler(req, res) {
         "Unknown Artist";
 
       const filename =
-        `${song} - ${artist}`
-          .replace(/[\\/:*?"<>|]/g, "")
+        `${songName} - ${artist}`
+          .replace(
+            /[\\/:*?"<>|]/g,
+            ""
+          )
           .trim() +
         ".mp3";
 
-      return res.status(200).json({
-        success: true,
-        platform: "spotify",
+      // -----------------------------------------
+      // AMBIL FILE DARI CDN
+      // -----------------------------------------
 
-        title: song,
-        author: artist,
+      const audioResponse =
+        await fetch(data.download_url, {
+          method: "GET",
+          headers: {
+            Accept:
+              "audio/mpeg,audio/*,*/*"
+          }
+        });
 
-        duration:
-          metadata.duration || "-",
+      if (!audioResponse.ok) {
+        return res.status(502).json({
+          success: false,
+          message:
+            `Gagal mengambil file Spotify (${audioResponse.status}).`
+        });
+      }
 
-        thumbnail:
-          metadata.image || "",
+      // -----------------------------------------
+      // CONTENT TYPE
+      // -----------------------------------------
 
-        downloadUrl:
-          downloadUrl,
+      const contentType =
+        audioResponse.headers.get(
+          "content-type"
+        ) ||
+        "audio/mpeg";
 
-        audioUrl:
-          downloadUrl,
+      // -----------------------------------------
+      // FILE SIZE
+      // -----------------------------------------
 
-        filename:
-          filename
-      });
+      const contentLength =
+        audioResponse.headers.get(
+          "content-length"
+        );
+
+      // -----------------------------------------
+      // RESPONSE SEBAGAI FILE
+      // -----------------------------------------
+
+      res.setHeader(
+        "Content-Type",
+        contentType
+      );
+
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${filename}"`
+      );
+
+      if (contentLength) {
+        res.setHeader(
+          "Content-Length",
+          contentLength
+        );
+      }
+
+      // -----------------------------------------
+      // STREAM FILE
+      // -----------------------------------------
+
+      if (
+        audioResponse.body &&
+        typeof audioResponse.body.pipe === "function"
+      ) {
+
+        return audioResponse.body.pipe(res);
+
+      }
+
+      // -----------------------------------------
+      // FALLBACK
+      // -----------------------------------------
+
+      const buffer =
+        Buffer.from(
+          await audioResponse.arrayBuffer()
+        );
+
+      return res.end(buffer);
     }
+
+    // =========================================
+    // UNKNOWN
+    // =========================================
 
     return res.status(400).json({
       success: false,
@@ -319,7 +408,7 @@ export default async function handler(req, res) {
   } catch (error) {
 
     console.error(
-      "DOWNLOAD ERROR:",
+      "DOWNLOAD API ERROR:",
       error
     );
 
