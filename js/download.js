@@ -9,42 +9,43 @@ document.addEventListener("DOMContentLoaded", () => {
   const downloadButton =
     document.getElementById("download-button");
 
-  const resultBox =
-    document.getElementById("download-result");
-
   const message =
     document.getElementById("download-message");
 
   const platformButtons =
-    document.querySelectorAll(".platform-button");
+    document.querySelectorAll(
+      ".platform-button"
+    );
 
   let selectedPlatform = "auto";
   let processing = false;
 
 
-  // =========================================
-  // MESSAGE
-  // =========================================
+  /* ================================
+     MESSAGE
+  ================================ */
 
   function showMessage(text) {
+
     if (message) {
       message.textContent = text;
     }
+
   }
 
 
-  // =========================================
-  // DETECT PLATFORM
-  // =========================================
+  /* ================================
+     DETECT PLATFORM
+  ================================ */
 
   function detectPlatform(url) {
 
     const value =
-      url.toLowerCase();
+      String(url).toLowerCase();
 
     if (
       value.includes("tiktok.com") ||
-      value.includes("vm.tiktok.com")
+      value.includes("vt.tiktok.com")
     ) {
       return "tiktok";
     }
@@ -65,93 +66,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (
       value.includes("facebook.com") ||
-      value.includes("fb.watch")
+      value.includes("fb.watch") ||
+      value.includes("fb.com")
     ) {
       return "facebook";
-    }
-
-    if (
-      value.includes("twitter.com") ||
-      value.includes("x.com")
-    ) {
-      return "twitter";
-    }
-
-    if (
-      value.includes("reddit.com") ||
-      value.includes("redd.it")
-    ) {
-      return "reddit";
-    }
-
-    if (
-      value.includes("capcut.com")
-    ) {
-      return "capcut";
-    }
-
-    if (
-      value.includes("snapchat.com")
-    ) {
-      return "snapchat";
-    }
-
-    if (
-      value.includes("soundcloud.com")
-    ) {
-      return "soundcloud";
-    }
-
-    if (
-      value.includes("snackvideo.com")
-    ) {
-      return "snackvideo";
-    }
-
-    if (
-      value.includes("douyin.com") ||
-      value.includes("v.douyin.com")
-    ) {
-      return "douyin";
     }
 
     return null;
   }
 
 
-  // =========================================
-  // PLATFORM BUTTON
-  // =========================================
+  /* ================================
+     PLATFORM BUTTON
+  ================================ */
 
   platformButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+      "click",
+      () => {
 
-      platformButtons.forEach(item => {
-        item.classList.remove("active");
-      });
+        if (button.disabled) return;
 
-      button.classList.add("active");
+        platformButtons.forEach(item => {
+          item.classList.remove(
+            "active"
+          );
+        });
 
-      selectedPlatform =
-        button.dataset.platform || "auto";
-
-      if (selectedPlatform === "auto") {
-        showMessage("Platform otomatis.");
-      } else {
-        showMessage(
-          `Platform: ${selectedPlatform}`
+        button.classList.add(
+          "active"
         );
-      }
 
-    });
+        selectedPlatform =
+          button.dataset.platform ||
+          "auto";
+
+        if (
+          selectedPlatform === "auto"
+        ) {
+
+          showMessage(
+            "Platform otomatis."
+          );
+
+        } else {
+
+          showMessage(
+            `Platform: ${selectedPlatform}`
+          );
+
+        }
+
+      }
+    );
 
   });
 
 
-  // =========================================
-  // PASTE
-  // =========================================
+  /* ================================
+     PASTE
+  ================================ */
 
   pasteButton?.addEventListener(
     "click",
@@ -160,10 +135,13 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
 
         const text =
-          await navigator.clipboard.readText();
+          await navigator.clipboard
+            .readText();
 
         if (!text) {
-          showMessage("Clipboard kosong.");
+          showMessage(
+            "Clipboard kosong."
+          );
           return;
         }
 
@@ -175,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (platform) {
 
           showMessage(
-            `Link ${platform} terdeteksi.`
+            `${capitalize(platform)} terdeteksi.`
           );
 
         } else {
@@ -186,9 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-      } catch (error) {
-
-        console.error(error);
+      } catch {
 
         showMessage(
           "Tidak bisa membaca clipboard. Tempel link manual."
@@ -200,22 +176,9 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  // =========================================
-  // RESET
-  // =========================================
-
-  function resetResult() {
-
-    if (resultBox) {
-      resultBox.hidden = true;
-    }
-
-  }
-
-
-  // =========================================
-  // DOWNLOAD
-  // =========================================
+  /* ================================
+     DOWNLOAD
+  ================================ */
 
   downloadButton?.addEventListener(
     "click",
@@ -225,10 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const url =
         urlInput.value.trim();
-
-      // =====================================
-      // CHECK URL
-      // =====================================
 
       if (!url) {
 
@@ -240,7 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return;
       }
-
 
       if (
         !/^https?:\/\//i.test(url)
@@ -254,14 +212,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
 
-      // =====================================
-      // DETECT
-      // =====================================
+      /* PLATFORM */
 
       let platform =
         selectedPlatform;
 
-      if (platform === "auto") {
+      if (
+        platform === "auto"
+      ) {
 
         platform =
           detectPlatform(url);
@@ -269,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!platform) {
 
           showMessage(
-            "Platform tidak didukung."
+            "Platform belum didukung."
           );
 
           return;
@@ -278,13 +236,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
 
-      // =====================================
-      // START
-      // =====================================
+      /* START */
 
       processing = true;
-
-      resetResult();
 
       downloadButton.disabled =
         true;
@@ -293,15 +247,15 @@ document.addEventListener("DOMContentLoaded", () => {
         "<span>⟳</span> Processing...";
 
       showMessage(
-        `Memproses ${platform}...`
+        `Memproses ${capitalize(platform)}...`
       );
 
 
       try {
 
-        // ===================================
-        // REQUEST BACKEND
-        // ===================================
+        /* ============================
+           BACKEND
+        ============================ */
 
         const response =
           await fetch(
@@ -315,32 +269,26 @@ document.addEventListener("DOMContentLoaded", () => {
               },
 
               body: JSON.stringify({
-                url: url
+                url,
+                platform
               })
             }
           );
 
 
-        // ===================================
-        // CHECK CONTENT TYPE
-        // ===================================
+        /* ============================
+           ERROR
+        ============================ */
 
-        const contentType =
-          response.headers.get(
-            "content-type"
-          ) || "";
-
-
-        // ===================================
-        // ERROR JSON
-        // ===================================
-
-        if (
-          !response.ok
-        ) {
+        if (!response.ok) {
 
           let errorMessage =
             "Download gagal.";
+
+          const contentType =
+            response.headers.get(
+              "content-type"
+            ) || "";
 
           if (
             contentType.includes(
@@ -350,11 +298,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             try {
 
-              const errorData =
+              const data =
                 await response.json();
 
               errorMessage =
-                errorData.message ||
+                data.message ||
                 errorMessage;
 
             } catch {}
@@ -364,42 +312,67 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error(
             errorMessage
           );
-
         }
 
 
-        // ===================================
-        // FILE
-        // ===================================
+        /* ============================
+           CHECK FILE
+        ============================ */
 
         const blob =
           await response.blob();
 
+        if (
+          !blob ||
+          blob.size <= 0
+        ) {
 
-        if (!blob || blob.size === 0) {
           throw new Error(
             "File yang diterima kosong."
           );
+
         }
 
 
-        // ===================================
-        // CREATE DOWNLOAD
-        // ===================================
+        /* ============================
+           EXTENSION
+        ============================ */
+
+        const contentType =
+          response.headers.get(
+            "content-type"
+          ) || "";
+
+        const isAudio =
+          contentType.includes(
+            "audio"
+          );
+
+        const extension =
+          isAudio
+            ? "mp3"
+            : "mp4";
+
+
+        /* ============================
+           DOWNLOAD
+        ============================ */
 
         const blobUrl =
-          URL.createObjectURL(blob);
+          URL.createObjectURL(
+            blob
+          );
 
         const link =
-          document.createElement("a");
+          document.createElement(
+            "a"
+          );
 
         link.href =
           blobUrl;
 
         link.download =
-          platform === "soundcloud"
-            ? "gallehs-audio.mp3"
-            : "gallehs-video.mp4";
+          `gallehs-${platform}.${extension}`;
 
         link.style.display =
           "none";
@@ -412,44 +385,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
         link.remove();
 
+
         setTimeout(() => {
+
           URL.revokeObjectURL(
             blobUrl
           );
+
         }, 5000);
 
 
-        // ===================================
-        // SUCCESS
-        // ===================================
+        /* ============================
+           SUCCESS
+        ============================ */
 
-        if (
-          platform === "soundcloud"
-        ) {
-
-          showMessage(
-            "Berhasil! Download Audio"
-          );
-
-        } else {
-
-          showMessage(
-            "Berhasil! Download Video Tanpa WM"
-          );
-
-        }
-
+        showMessage(
+          "✅ Berhasil! Download video tanpa WM"
+        );
 
       } catch (error) {
 
         console.error(
-          "Downloader error:",
+          "[GALLEHS]",
           error
         );
 
         showMessage(
-          error.message ||
-          "Gagal mendownload media."
+          `❌ ${error.message || "Download gagal."}`
         );
 
       } finally {
@@ -468,15 +430,17 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  // =========================================
-  // ENTER
-  // =========================================
+  /* ================================
+     ENTER
+  ================================ */
 
   urlInput?.addEventListener(
     "keydown",
     event => {
 
-      if (event.key === "Enter") {
+      if (
+        event.key === "Enter"
+      ) {
 
         event.preventDefault();
 
@@ -486,5 +450,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
   );
+
+
+  /* ================================
+     HELPER
+  ================================ */
+
+  function capitalize(text) {
+
+    return String(text)
+      .charAt(0)
+      .toUpperCase() +
+      String(text)
+        .slice(1);
+
+  }
 
 });
