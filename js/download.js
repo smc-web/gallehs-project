@@ -2,12 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const urlInput = document.getElementById("download-url");
   const pasteButton = document.getElementById("paste-button");
   const downloadButton = document.getElementById("download-button");
-
   const resultBox = document.getElementById("download-result");
-  const thumbnail = document.getElementById("result-thumbnail");
-  const title = document.getElementById("result-title");
-  const author = document.getElementById("result-author");
-  const duration = document.getElementById("result-duration");
   const message = document.getElementById("download-message");
 
   const platformButtons =
@@ -15,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let selectedPlatform = "auto";
   let processing = false;
-
 
   /* =========================
      MESSAGE
@@ -26,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
       message.textContent = text;
     }
   }
-
 
   /* =========================
      DETECT PLATFORM
@@ -66,15 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return null;
   }
 
-
   /* =========================
      PLATFORM BUTTON
   ========================= */
 
   platformButtons.forEach(button => {
-
     button.addEventListener("click", () => {
-
       platformButtons.forEach(item => {
         item.classList.remove("active");
       });
@@ -89,20 +79,15 @@ document.addEventListener("DOMContentLoaded", () => {
           ? "Platform otomatis."
           : `Platform: ${selectedPlatform}`
       );
-
     });
-
   });
-
 
   /* =========================
      PASTE
   ========================= */
 
   pasteButton?.addEventListener("click", async () => {
-
     try {
-
       const text =
         await navigator.clipboard.readText();
 
@@ -124,87 +109,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
     } catch (error) {
-
       console.error(error);
 
       showMessage(
         "Tidak bisa membaca clipboard. Tempel link secara manual."
       );
-
     }
-
   });
-
 
   /* =========================
      RESET RESULT
   ========================= */
 
   function resetResult() {
-
-    if (!resultBox) return;
-
-    resultBox.hidden = true;
-
-    if (thumbnail) {
-      thumbnail.src = "";
+    if (resultBox) {
+      resultBox.hidden = true;
     }
-
-    if (title) {
-      title.textContent = "-";
-    }
-
-    if (author) {
-      author.textContent = "-";
-    }
-
-    if (duration) {
-      duration.textContent = "-";
-    }
-
   }
-
-
-  /* =========================
-     SHOW RESULT
-  ========================= */
-
-  function showResult(data) {
-
-    if (!resultBox) return;
-
-    if (thumbnail) {
-      thumbnail.src =
-        data.thumbnail ||
-        data.thumb ||
-        "";
-    }
-
-    if (title) {
-      title.textContent =
-        data.title ||
-        data.name ||
-        "Media";
-    }
-
-    if (author) {
-      author.textContent =
-        data.author ||
-        data.uploader ||
-        data.username ||
-        "-";
-    }
-
-    if (duration) {
-      duration.textContent =
-        data.duration ||
-        "-";
-    }
-
-    resultBox.hidden = false;
-
-  }
-
 
   /* =========================
      DOWNLOAD
@@ -218,19 +139,15 @@ document.addEventListener("DOMContentLoaded", () => {
       urlInput.value.trim();
 
     if (!url) {
-
       showMessage(
         "Masukkan link terlebih dahulu."
       );
 
       urlInput.focus();
-
       return;
     }
 
-
     if (!/^https?:\/\//i.test(url)) {
-
       showMessage(
         "Link tidak valid."
       );
@@ -238,24 +155,19 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-
     let platform = selectedPlatform;
 
     if (platform === "auto") {
-
       platform = detectPlatform(url);
 
       if (!platform) {
-
         showMessage(
           "Platform tidak didukung."
         );
 
         return;
       }
-
     }
-
 
     processing = true;
 
@@ -270,17 +182,11 @@ document.addEventListener("DOMContentLoaded", () => {
       `Memproses ${platform}...`
     );
 
-
     try {
 
-      /*
-       * =========================
-       * BACKEND
-       * =========================
-       *
-       * Backend inilah yang nanti
-       * memanggil API/provider.
-       */
+      /* =========================
+         BACKEND API
+      ========================= */
 
       const response = await fetch(
         "/api/download",
@@ -299,7 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
-
       let data = {};
 
       try {
@@ -310,73 +215,28 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       }
 
-
       if (!response.ok) {
-
         throw new Error(
           data.message ||
           data.error ||
           `Server error (${response.status})`
         );
-
       }
 
-
       if (!data.success) {
-
         throw new Error(
           data.message ||
           "Media gagal diproses."
         );
-
       }
-
 
       /* =========================
-         RESULT
+         SUCCESS
       ========================= */
 
-      showResult(data);
-
-
       showMessage(
-        "Media berhasil ditemukan."
+        "Berhasil! Download Video Tanpa WM"
       );
-
-
-      /*
-       * =========================
-       * DOWNLOAD
-       * =========================
-       */
-
-      if (data.downloadUrl) {
-
-        const downloadLink =
-          document.createElement("a");
-
-        downloadLink.href =
-          data.downloadUrl;
-
-        downloadLink.target =
-          "_blank";
-
-        downloadLink.rel =
-          "noopener noreferrer";
-
-        downloadLink.style.display =
-          "none";
-
-        document.body.appendChild(
-          downloadLink
-        );
-
-        downloadLink.click();
-
-        downloadLink.remove();
-
-      }
-
 
     } catch (error) {
 
@@ -398,11 +258,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       downloadButton.innerHTML =
         "<span>↓</span> Download";
-
     }
 
   });
-
 
   /* =========================
      ENTER
@@ -413,11 +271,9 @@ document.addEventListener("DOMContentLoaded", () => {
     event => {
 
       if (event.key === "Enter") {
-
         event.preventDefault();
 
         downloadButton?.click();
-
       }
 
     }
