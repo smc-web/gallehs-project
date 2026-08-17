@@ -1,12 +1,18 @@
 /* =========================================
    GALLEHS PROJECT — ANIME FINDER
+   Otakotaku API
 ========================================= */
 
 const ANIME_API =
   "https://sylvatica.my.id/api/anime/otakotaku";
 
-const API_KEY = "sylva-FwU0ERyW";
+const API_KEY =
+  "sylva-FwU0ERy";
 
+
+/* =========================================
+   ELEMENTS
+========================================= */
 
 const searchInput =
   document.getElementById("anime-search");
@@ -40,6 +46,10 @@ function escapeHTML(value) {
 }
 
 
+/* =========================================
+   GET TITLE
+========================================= */
+
 function getTitle(item) {
 
   return (
@@ -52,9 +62,14 @@ function getTitle(item) {
 }
 
 
+/* =========================================
+   GET IMAGE
+========================================= */
+
 function getImage(item) {
 
   return (
+    item.imageUrl ||
     item.thumbnail ||
     item.thumb ||
     item.image ||
@@ -66,6 +81,10 @@ function getImage(item) {
   );
 }
 
+
+/* =========================================
+   GET URL
+========================================= */
 
 function getUrl(item) {
 
@@ -98,6 +117,10 @@ function setMessage(text) {
 
 function showLoading() {
 
+  if (!resultsContainer) {
+    return;
+  }
+
   resultsContainer.innerHTML = `
 
     <div class="anime-empty">
@@ -125,7 +148,13 @@ function showLoading() {
    EMPTY
 ========================================= */
 
-function showEmpty(text = "Anime tidak ditemukan.") {
+function showEmpty(
+  text = "Anime tidak ditemukan."
+) {
+
+  if (!resultsContainer) {
+    return;
+  }
 
   resultsContainer.innerHTML = `
 
@@ -156,11 +185,17 @@ function showEmpty(text = "Anime tidak ditemukan.") {
 
 function showError(error) {
 
+  if (!resultsContainer) {
+    return;
+  }
+
   resultsContainer.innerHTML = `
 
     <div class="anime-error">
 
-      Gagal mengambil data anime.
+      <strong>
+        Gagal mengambil data anime.
+      </strong>
 
       <small>
         ${escapeHTML(error)}
@@ -174,13 +209,38 @@ function showError(error) {
 
 
 /* =========================================
-   GET RESULTS
+   EXTRACT ANIME RESULTS
 ========================================= */
 
 function extractResults(response) {
 
+  /*
+    Response API:
+
+    {
+      "result": {
+        "anime": [...]
+      }
+    }
+  */
+
+  if (
+    response &&
+    response.result &&
+    Array.isArray(response.result.anime)
+  ) {
+
+    return response.result.anime;
+
+  }
+
+
+  /* Fallback */
+
   if (Array.isArray(response)) {
+
     return response;
+
   }
 
 
@@ -188,7 +248,9 @@ function extractResults(response) {
     response &&
     Array.isArray(response.data)
   ) {
+
     return response.data;
+
   }
 
 
@@ -196,7 +258,9 @@ function extractResults(response) {
     response &&
     Array.isArray(response.results)
   ) {
+
     return response.results;
+
   }
 
 
@@ -204,7 +268,9 @@ function extractResults(response) {
     response &&
     Array.isArray(response.result)
   ) {
+
     return response.result;
+
   }
 
 
@@ -214,16 +280,22 @@ function extractResults(response) {
 
 
 /* =========================================
-   RENDER
+   RENDER ANIME
 ========================================= */
 
 function renderAnime(results) {
+
+  if (!resultsContainer) {
+    return;
+  }
+
 
   if (!results.length) {
 
     showEmpty();
 
     return;
+
   }
 
 
@@ -231,13 +303,21 @@ function renderAnime(results) {
     results.map((item) => {
 
       const title =
-        escapeHTML(getTitle(item));
+        escapeHTML(
+          getTitle(item)
+        );
+
 
       const image =
-        escapeHTML(getImage(item));
+        escapeHTML(
+          getImage(item)
+        );
+
 
       const url =
-        escapeHTML(getUrl(item));
+        escapeHTML(
+          getUrl(item)
+        );
 
 
       return `
@@ -250,20 +330,25 @@ function renderAnime(results) {
               image
 
                 ? `
+
                   <img
                     src="${image}"
                     alt="${title}"
                     loading="lazy"
                     onerror="
                       this.style.display='none';
+                      this.parentElement.classList.add('image-error');
                     "
                   >
+
                 `
 
                 : `
+
                   <div class="anime-no-image">
                     ANIME
                   </div>
+
                 `
             }
 
@@ -278,9 +363,11 @@ function renderAnime(results) {
 
 
             ${
+              url &&
               url !== "#"
 
                 ? `
+
                   <a
                     class="anime-detail"
                     href="${url}"
@@ -289,9 +376,16 @@ function renderAnime(results) {
                   >
                     Lihat Detail
                   </a>
+
                 `
 
-                : ""
+                : `
+
+                  <span class="anime-detail disabled">
+                    Detail tidak tersedia
+                  </span>
+
+                `
             }
 
           </div>
@@ -311,9 +405,20 @@ function renderAnime(results) {
 
 async function searchAnime() {
 
+  if (!searchInput) {
+    console.error(
+      "Element #anime-search tidak ditemukan."
+    );
+
+    return;
+  }
+
+
   const query =
     searchInput.value.trim();
 
+
+  /* Empty query */
 
   if (!query) {
 
@@ -321,31 +426,47 @@ async function searchAnime() {
       "Masukkan judul anime terlebih dahulu."
     );
 
+    showEmpty(
+      "Masukkan judul anime."
+    );
+
     searchInput.focus();
 
     return;
+
   }
 
 
-  if (!API_KEY ||
-      API_KEY === "MASUKKAN_API_KEY_DI_SINI") {
+  /* API key check */
+
+  if (
+    !API_KEY ||
+    API_KEY === "MASUKKAN_API_KEY_DI_SINI"
+  ) {
 
     setMessage(
       "API key belum dipasang."
     );
 
     return;
+
   }
 
 
-  searchButton.disabled = true;
+  /* Disable button */
 
-  searchButton.textContent =
-    "Searching...";
+  if (searchButton) {
+
+    searchButton.disabled = true;
+
+    searchButton.textContent =
+      "Searching...";
+
+  }
 
 
   setMessage(
-    "Mencari anime..."
+    `Mencari "${query}"...`
   );
 
 
@@ -354,15 +475,32 @@ async function searchAnime() {
 
   try {
 
+    /*
+      Build API URL
+    */
+
     const url =
       `${ANIME_API}` +
       `?q=${encodeURIComponent(query)}` +
       `&apikey=${encodeURIComponent(API_KEY)}`;
 
 
-    const response =
-      await fetch(url);
+    console.log(
+      "Anime API Request:",
+      url
+    );
 
+
+    const response =
+      await fetch(url, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json"
+        }
+      });
+
+
+    /* HTTP error */
 
     if (!response.ok) {
 
@@ -372,6 +510,8 @@ async function searchAnime() {
 
     }
 
+
+    /* JSON */
 
     const data =
       await response.json();
@@ -383,23 +523,49 @@ async function searchAnime() {
     );
 
 
+    /* API status */
+
+    if (
+      data &&
+      data.status === false
+    ) {
+
+      throw new Error(
+        "API mengembalikan status false."
+      );
+
+    }
+
+
+    /* Extract anime */
+
     const results =
       extractResults(data);
 
 
+    console.log(
+      "Anime Results:",
+      results
+    );
+
+
+    /* Render */
+
     renderAnime(results);
 
+
+    /* Message */
 
     if (results.length) {
 
       setMessage(
-        `${results.length} hasil ditemukan.`
+        `${results.length} anime ditemukan untuk "${query}".`
       );
 
     } else {
 
       setMessage(
-        "Tidak ada hasil."
+        `Anime "${query}" tidak ditemukan.`
       );
 
     }
@@ -426,10 +592,16 @@ async function searchAnime() {
 
   } finally {
 
-    searchButton.disabled = false;
+    /* Enable button */
 
-    searchButton.textContent =
-      "Search";
+    if (searchButton) {
+
+      searchButton.disabled = false;
+
+      searchButton.textContent =
+        "Search";
+
+    }
 
   }
 
@@ -480,4 +652,13 @@ if (searchInput) {
 
 setMessage(
   "Masukkan judul anime untuk mulai mencari."
+);
+
+
+/* =========================================
+   DEBUG
+========================================= */
+
+console.log(
+  "Gallehs Anime Finder berhasil dimuat."
 );
