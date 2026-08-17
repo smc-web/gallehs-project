@@ -9,16 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const downloadButton =
     document.getElementById("download-button");
 
-  const message =
-    document.getElementById("download-message");
-
   const resultBox =
     document.getElementById("download-result");
 
+  const message =
+    document.getElementById("download-message");
+
   const platformButtons =
-    document.querySelectorAll(
-      ".platform-button"
-    );
+    document.querySelectorAll(".platform-button");
 
   let selectedPlatform = "auto";
   let processing = false;
@@ -29,11 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================================
 
   function showMessage(text) {
-
     if (message) {
       message.textContent = text;
     }
-
   }
 
 
@@ -46,21 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const value =
       url.toLowerCase();
 
-
     if (
-      value.includes("tiktok.com")
+      value.includes("tiktok.com") ||
+      value.includes("vm.tiktok.com")
     ) {
       return "tiktok";
     }
-
-
-    if (
-      value.includes("spotify.com") ||
-      value.includes("spotify.link")
-    ) {
-      return "spotify";
-    }
-
 
     if (
       value.includes("youtube.com") ||
@@ -69,14 +56,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return "youtube";
     }
 
-
     if (
       value.includes("instagram.com") ||
       value.includes("instagr.am")
     ) {
       return "instagram";
     }
-
 
     if (
       value.includes("facebook.com") ||
@@ -85,9 +70,52 @@ document.addEventListener("DOMContentLoaded", () => {
       return "facebook";
     }
 
+    if (
+      value.includes("twitter.com") ||
+      value.includes("x.com")
+    ) {
+      return "twitter";
+    }
+
+    if (
+      value.includes("reddit.com") ||
+      value.includes("redd.it")
+    ) {
+      return "reddit";
+    }
+
+    if (
+      value.includes("capcut.com")
+    ) {
+      return "capcut";
+    }
+
+    if (
+      value.includes("snapchat.com")
+    ) {
+      return "snapchat";
+    }
+
+    if (
+      value.includes("soundcloud.com")
+    ) {
+      return "soundcloud";
+    }
+
+    if (
+      value.includes("snackvideo.com")
+    ) {
+      return "snackvideo";
+    }
+
+    if (
+      value.includes("douyin.com") ||
+      value.includes("v.douyin.com")
+    ) {
+      return "douyin";
+    }
 
     return null;
-
   }
 
 
@@ -97,47 +125,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   platformButtons.forEach(button => {
 
-    button.addEventListener(
-      "click",
-      () => {
+    button.addEventListener("click", () => {
 
-        platformButtons.forEach(item => {
+      platformButtons.forEach(item => {
+        item.classList.remove("active");
+      });
 
-          item.classList.remove(
-            "active"
-          );
+      button.classList.add("active");
 
-        });
+      selectedPlatform =
+        button.dataset.platform || "auto";
 
-
-        button.classList.add(
-          "active"
+      if (selectedPlatform === "auto") {
+        showMessage("Platform otomatis.");
+      } else {
+        showMessage(
+          `Platform: ${selectedPlatform}`
         );
-
-
-        selectedPlatform =
-          button.dataset.platform ||
-          "auto";
-
-
-        if (
-          selectedPlatform === "auto"
-        ) {
-
-          showMessage(
-            "Platform otomatis."
-          );
-
-        } else {
-
-          showMessage(
-            `Platform: ${selectedPlatform}`
-          );
-
-        }
-
       }
-    );
+
+    });
 
   });
 
@@ -155,25 +162,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const text =
           await navigator.clipboard.readText();
 
-
         if (!text) {
-
-          showMessage(
-            "Clipboard kosong."
-          );
-
+          showMessage("Clipboard kosong.");
           return;
-
         }
 
-
-        urlInput.value =
-          text;
-
+        urlInput.value = text;
 
         const platform =
           detectPlatform(text);
-
 
         if (platform) {
 
@@ -194,13 +191,26 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error(error);
 
         showMessage(
-          "Tidak bisa membaca clipboard. Tempel link secara manual."
+          "Tidak bisa membaca clipboard. Tempel link manual."
         );
 
       }
 
     }
   );
+
+
+  // =========================================
+  // RESET
+  // =========================================
+
+  function resetResult() {
+
+    if (resultBox) {
+      resultBox.hidden = true;
+    }
+
+  }
 
 
   // =========================================
@@ -211,14 +221,14 @@ document.addEventListener("DOMContentLoaded", () => {
     "click",
     async () => {
 
-      if (processing) {
-        return;
-      }
-
+      if (processing) return;
 
       const url =
         urlInput.value.trim();
 
+      // =====================================
+      // CHECK URL
+      // =====================================
 
       if (!url) {
 
@@ -229,7 +239,6 @@ document.addEventListener("DOMContentLoaded", () => {
         urlInput.focus();
 
         return;
-
       }
 
 
@@ -242,21 +251,20 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         return;
-
       }
 
+
+      // =====================================
+      // DETECT
+      // =====================================
 
       let platform =
         selectedPlatform;
 
-
-      if (
-        platform === "auto"
-      ) {
+      if (platform === "auto") {
 
         platform =
           detectPlatform(url);
-
 
         if (!platform) {
 
@@ -265,46 +273,24 @@ document.addEventListener("DOMContentLoaded", () => {
           );
 
           return;
-
         }
 
       }
 
 
-      // =========================================
-      // COMING SOON
-      // =========================================
-
-      if (
-        platform === "youtube" ||
-        platform === "instagram" ||
-        platform === "facebook"
-      ) {
-
-        showMessage(
-          `${platform} masih Coming Soon.`
-        );
-
-        return;
-
-      }
-
+      // =====================================
+      // START
+      // =====================================
 
       processing = true;
 
-
-      if (resultBox) {
-        resultBox.hidden = true;
-      }
-
+      resetResult();
 
       downloadButton.disabled =
         true;
 
-
       downloadButton.innerHTML =
         "<span>⟳</span> Processing...";
-
 
       showMessage(
         `Memproses ${platform}...`
@@ -313,174 +299,165 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
 
-        // =====================================
-        // CALL BACKEND
-        // =====================================
+        // ===================================
+        // REQUEST BACKEND
+        // ===================================
 
         const response =
           await fetch(
             "/api/download",
             {
-
               method: "POST",
 
               headers: {
-
                 "Content-Type":
                   "application/json"
-
               },
 
-              body:
-                JSON.stringify({
-
-                  url:
-                    url,
-
-                  platform:
-                    platform
-
-                })
-
+              body: JSON.stringify({
+                url: url
+              })
             }
           );
 
 
-        let data = {};
+        // ===================================
+        // CHECK CONTENT TYPE
+        // ===================================
+
+        const contentType =
+          response.headers.get(
+            "content-type"
+          ) || "";
 
 
-        try {
-
-          data =
-            await response.json();
-
-        } catch {
-
-          throw new Error(
-            "Response server bukan JSON."
-          );
-
-        }
-
-
-        console.log(
-          "DOWNLOAD RESPONSE:",
-          data
-        );
-
+        // ===================================
+        // ERROR JSON
+        // ===================================
 
         if (
-          !response.ok ||
-          !data.success
+          !response.ok
         ) {
 
+          let errorMessage =
+            "Download gagal.";
+
+          if (
+            contentType.includes(
+              "application/json"
+            )
+          ) {
+
+            try {
+
+              const errorData =
+                await response.json();
+
+              errorMessage =
+                errorData.message ||
+                errorMessage;
+
+            } catch {}
+
+          }
+
           throw new Error(
-            data.message ||
-            "Media gagal diproses."
+            errorMessage
           );
 
         }
 
 
-        if (
-          !data.downloadUrl
-        ) {
+        // ===================================
+        // FILE
+        // ===================================
 
+        const blob =
+          await response.blob();
+
+
+        if (!blob || blob.size === 0) {
           throw new Error(
-            "URL media tidak ditemukan."
+            "File yang diterima kosong."
           );
-
         }
 
 
-        // =====================================
-        // DIRECT DOWNLOAD
-        // =====================================
+        // ===================================
+        // CREATE DOWNLOAD
+        // ===================================
+
+        const blobUrl =
+          URL.createObjectURL(blob);
 
         const link =
           document.createElement("a");
 
-
         link.href =
-          data.downloadUrl;
-
+          blobUrl;
 
         link.download =
-          data.filename ||
-          (
-            platform === "spotify"
-              ? "spotify-audio.mp3"
-              : "tiktok-video-no-wm.mp4"
-          );
-
-
-        link.target =
-          "_blank";
-
-
-        link.rel =
-          "noopener noreferrer";
-
+          platform === "soundcloud"
+            ? "gallehs-audio.mp3"
+            : "gallehs-video.mp4";
 
         link.style.display =
           "none";
-
 
         document.body.appendChild(
           link
         );
 
-
         link.click();
-
 
         link.remove();
 
+        setTimeout(() => {
+          URL.revokeObjectURL(
+            blobUrl
+          );
+        }, 5000);
 
-        // =====================================
-        // SUCCESS MESSAGE
-        // =====================================
+
+        // ===================================
+        // SUCCESS
+        // ===================================
 
         if (
-          platform === "tiktok"
+          platform === "soundcloud"
         ) {
+
+          showMessage(
+            "Berhasil! Download Audio"
+          );
+
+        } else {
 
           showMessage(
             "Berhasil! Download Video Tanpa WM"
           );
 
-        } else if (
-          platform === "spotify"
-        ) {
-
-          showMessage(
-            "Berhasil! Download Audio Spotify"
-          );
-
         }
+
 
       } catch (error) {
 
         console.error(
-          "DOWNLOAD ERROR:",
+          "Downloader error:",
           error
         );
 
-
         showMessage(
           error.message ||
-          "Gagal mengunduh media."
+          "Gagal mendownload media."
         );
 
       } finally {
 
-        processing =
-          false;
-
+        processing = false;
 
         downloadButton.disabled =
           false;
-
 
         downloadButton.innerHTML =
           "<span>↓</span> Download";
@@ -499,9 +476,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "keydown",
     event => {
 
-      if (
-        event.key === "Enter"
-      ) {
+      if (event.key === "Enter") {
 
         event.preventDefault();
 
