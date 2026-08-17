@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Gallehs Project</title>
+  <meta name="description" content="Gallehs Project">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <main class="home">
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <header class="hero">
+
+      <div class="hero-badge">
+        GALLEHS PROJECT
+      </div>
+
+      <h1 class="project-title">
+        Gallehs Project
+      </h1>
+
+      <div class="pixel-title">
+        Tools/Alat Yang Mempermudahkanmu?
+      </div>
+
+      <p class="made-by">
+        Project Made by
+        <span class="heart">♥</span>
+      </p>
+
+    </header>
+
+
+    <!-- =========================
+         TOOLS
+    ========================== -->
+
+    <section class="home-tools">
+
+      <h2 class="section-title">
+        Tools & Features
+      </h2>
+
+
+      <div class="project-menu">
+
+        <!-- DOWNLOADER -->
+
+<a
+  class="project-card"
+  href="download.html"
+>
+  <span class="card-icon">↓</span>
+
+  <span class="card-title">
+    Downloader
+  </span>
+
+  <span class="card-description">
+    Download media
+  </span>
+</a>
+
+
+        <!-- ANIME -->
+
+        <button
+          class="project-card"
+          type="button"
+          data-tool="anime"
+        >
+          <span class="card-icon">▶</span>
+
+          <span class="card-title">
+            Anime
+          </span>
+
+          <span class="card-description">
+            Search anime
+          </span>
+        </button>
+
+
+        <!-- MANGA -->
+
+        <button
+          class="project-card"
+          type="button"
+          data-tool="manga"
+        >
+          <span class="card-icon">▤</span>
+
+          <span class="card-title">
+            Manga
+          </span>
+
+          <span class="card-description">
+            Search manga
+          </span>
+        </button>
+
+
+        <!-- REMOVE BG -->
+
+        <button
+          class="project-card"
+          type="button"
+          data-tool="removebg"
+        >
+          <span class="card-icon">✦</span>
+
+          <span class="card-title">
+            Remove BG
+          </span>
+
+          <span class="card-description">
+            Remove background
+          </span>
+        </button>
+
+
+        <!-- HD PHOTO -->
+
+        <button
+          class="project-card"
+          type="button"
+          data-tool="hdphoto"
+        >
+          <span class="card-icon">◇</span>
+
+          <span class="card-title">
+            HD Photo
+          </span>
+
+          <span class="card-description">
+            Enhance photo
+          </span>
+        </button>
+
+
+        <!-- AI -->
+
+        <button
+          class="project-card"
+          type="button"
+          data-tool="ai"
+        >
+          <span class="card-icon">✧</span>
+
+          <span class="card-title">
+            AI
+          </span>
+
+          <span class="card-description">
+            AI tools
+          </span>
+        </button>
+
+      </div>
+
+
+      <!-- =========================
+           TOOL PANELS
+      ========================== -->
+
+      <div class="tool-panels">
+
+
+        <!-- DOWNLOADER PANEL -->
+
+        <section
+          class="tool-panel"
+          id="panel-downloader"
+          data-panel="downloader"
+          hidden
+        >
+
+          <button
+            class="panel-close"
+            type="button"
+            aria-label="Tutup"
+          >
+            ×
+          </button>
+
+          <div class="panel-header">
+
+            <span class="panel-icon">
+              ↓
+            </span>
+
+            <div>
+              <h3>Downloader</h3>
+              <p>Download media dari platform yang didukung.</p>
+            </div>
+
+          </div>
+
+          <div class="panel-content">
+            <!-- Downloader akan diisi pada step Downloader -->
+          </div>
+
+        </section>
+
+
+        <!-- ANIME PANEL -->
+
+        <section
+          class="tool-panel"
+          id="panel-anime"
+          data-panel="anime"
+          hidden
+        >
+
+          <button
+            class="panel-close"
+            type="button"
+            aria-label="Tutup"
+          >
+            ×
+          </button>
+
+          <div class="panel-header">
+
+            <span class="panel-icon">
+              ▶
+            </span>
+
+            <div>
+              <h3>Anime</h3>
+              <p>Cari informasi anime melalui API.</p>
+            </div>
+
+          </div>
+
+          <div class="panel-content">
+            <!-- Anime API akan diisi pada step Anime -->
+          </div>
+
+        </section>
+
+
+        <!-- MANGA PANEL -->
+
+        <section
+          class="tool-panel"
+          id="panel-manga"
+          data-panel="manga"
+          hidden
+        >
+
+          <button
+            class="panel-close"
+            type="button"
+            aria-label="Tutup"
+          >
+            ×
+          </button>
+
+          <div class="panel-header">
+
+            <span class="panel-icon">
+              ▤
+            </span>
+
+            <div>
+              <h3>Manga</h3>
+              <p>Cari informasi manga melalui API.</p>
+            </div>
+
+          </div>
+
+          <div class="panel-content">
+            <!-- Manga API akan diisi pada step Manga -->
+          </div>
+
+        </section>
+
+
+        <!-- REMOVE BG PANEL -->
+
+        <section
+          class="tool-panel"
+          id="panel-removebg"
+          data-panel="removebg"
+          hidden
+        >
+
+          <button
+            class="panel-close"
+            type="button"
+            aria-label="Tutup"
+          >
+            ×
+          </button>
+
+          <div class="panel-header">
+
+            <span class="panel-icon">
+              ✦
+            </span>
+
+            <div>
+              <h3>Remove BG</h3>
+              <p>Hapus background gambar.</p>
+            </div>
+
+          </div>
+
+          <div class="panel-content">
+            <!-- Remove BG API akan diisi pada step Remove BG -->
+          </div>
+
+        </section>
+
+
+        <!-- HD PHOTO PANEL -->
+
+        <section
+          class="tool-panel"
+          id="panel-hdphoto"
+          data-panel="hdphoto"
+          hidden
+        >
+
+          <button
+            class="panel-close"
+            type="button"
+            aria-label="Tutup"
+          >
+            ×
+          </button>
+
+          <div class="panel-header">
+
+            <span class="panel-icon">
+              ◇
+            </span>
+
+            <div>
+              <h3>HD Photo</h3>
+              <p>Tingkatkan kualitas gambar.</p>
+            </div>
+
+          </div>
+
+          <div class="panel-content">
+            <!-- HD Photo API akan diisi pada step HD Photo -->
+          </div>
+
+        </section>
+
+
+        <!-- AI PANEL -->
+
+        <section
+          class="tool-panel"
+          id="panel-ai"
+          data-panel="ai"
+          hidden
+        >
+
+          <button
+            class="panel-close"
+            type="button"
+            aria-label="Tutup"
+          >
+            ×
+          </button>
+
+          <div class="panel-header">
+
+            <span class="panel-icon">
+              ✧
+            </span>
+
+            <div>
+              <h3>AI</h3>
+              <p>AI assistant dan berbagai provider.</p>
+            </div>
+
+          </div>
+
+          <div class="panel-content">
+            <!-- AI API akan diisi pada step AI -->
+          </div>
+
+        </section>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         SOCIAL
+    ========================== -->
+
+    <footer class="social-footer">
+
+      <p class="follow-title">
+        Follow Me
+      </p>
+
+      <div class="social-links">
+
+        <a
+          href="https://instagram.com/gallehstt"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-card"
+        >
+
+          <span class="social-icon">
+            ◎
+          </span>
+
+          <span>
+            <small>Instagram</small>
+            <strong>@gallehs</strong>
+          </span>
+
+        </a>
+
+
+        <a
+          href="https://www.tiktok.com/@gallehsss"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-card"
+        >
+
+          <span class="social-icon">
+            ♪
+          </span>
+
+          <span>
+            <small>TikTok</small>
+            <strong>@gallehsss</strong>
+          </span>
+
+        </a>
+
+      </div>
+
+
+      <p class="copyright">
+        Gallehs Project
+      </p>
+
+    </footer>
+
+  </main>
+
+
+  <script src="js/main.js"></script>
+
+    </div>
+
+</body>
+</html>
