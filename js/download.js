@@ -35,10 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return "youtube";
     }
 
-    if (
-      value.includes("tiktok.com") ||
-      value.includes("vm.tiktok.com")
-    ) {
+    if (value.includes("tiktok.com")) {
       return "tiktok";
     }
 
@@ -65,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   platformButtons.forEach(button => {
     button.addEventListener("click", () => {
+
       platformButtons.forEach(item => {
         item.classList.remove("active");
       });
@@ -74,11 +72,13 @@ document.addEventListener("DOMContentLoaded", () => {
       selectedPlatform =
         button.dataset.platform || "auto";
 
-      showMessage(
-        selectedPlatform === "auto"
-          ? "Platform otomatis."
-          : `Platform: ${selectedPlatform}`
-      );
+      if (selectedPlatform === "auto") {
+        showMessage("Platform otomatis.");
+      } else {
+        showMessage(
+          `Platform: ${selectedPlatform}`
+        );
+      }
     });
   });
 
@@ -105,7 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
           `Link ${platform} terdeteksi.`
         );
       } else {
-        showMessage("Link berhasil ditempel.");
+        showMessage(
+          "Link berhasil ditempel."
+        );
       }
 
     } catch (error) {
@@ -118,12 +120,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =========================
-     RESET RESULT
+     HIDE RESULT
   ========================= */
 
-  function resetResult() {
+  function hideResult() {
     if (resultBox) {
       resultBox.hidden = true;
+      resultBox.style.display = "none";
     }
   }
 
@@ -131,136 +134,178 @@ document.addEventListener("DOMContentLoaded", () => {
      DOWNLOAD
   ========================= */
 
-  downloadButton?.addEventListener("click", async () => {
+  downloadButton?.addEventListener(
+    "click",
+    async () => {
 
-    if (processing) return;
+      if (processing) return;
 
-    const url =
-      urlInput.value.trim();
+      const url =
+        urlInput.value.trim();
 
-    if (!url) {
-      showMessage(
-        "Masukkan link terlebih dahulu."
-      );
-
-      urlInput.focus();
-      return;
-    }
-
-    if (!/^https?:\/\//i.test(url)) {
-      showMessage(
-        "Link tidak valid."
-      );
-
-      return;
-    }
-
-    let platform = selectedPlatform;
-
-    if (platform === "auto") {
-      platform = detectPlatform(url);
-
-      if (!platform) {
+      if (!url) {
         showMessage(
-          "Platform tidak didukung."
+          "Masukkan link terlebih dahulu."
+        );
+
+        urlInput.focus();
+        return;
+      }
+
+      if (!/^https?:\/\//i.test(url)) {
+        showMessage(
+          "Link tidak valid."
         );
 
         return;
       }
-    }
 
-    processing = true;
+      let platform = selectedPlatform;
 
-    resetResult();
+      if (platform === "auto") {
+        platform = detectPlatform(url);
 
-    downloadButton.disabled = true;
+        if (!platform) {
+          showMessage(
+            "Platform tidak didukung."
+          );
 
-    downloadButton.innerHTML =
-      "<span>⟳</span> Processing...";
-
-    showMessage(
-      `Memproses ${platform}...`
-    );
-
-    try {
-
-      /* =========================
-         BACKEND API
-      ========================= */
-
-      const response = await fetch(
-        "/api/download",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            url: url,
-            platform: platform
-          })
+          return;
         }
-      );
-
-      let data = {};
-
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error(
-          "Response API bukan JSON."
-        );
       }
 
-      if (!response.ok) {
-        throw new Error(
-          data.message ||
-          data.error ||
-          `Server error (${response.status})`
-        );
-      }
+      processing = true;
 
-      if (!data.success) {
-        throw new Error(
-          data.message ||
-          "Media gagal diproses."
-        );
-      }
+      hideResult();
 
-      /* =========================
-         SUCCESS
-      ========================= */
-
-      showMessage(
-        "Berhasil! Download Video Tanpa WM"
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Downloader error:",
-        error
-      );
-
-      showMessage(
-        error.message ||
-        "Gagal menghubungi server."
-      );
-
-    } finally {
-
-      processing = false;
-
-      downloadButton.disabled = false;
+      downloadButton.disabled = true;
 
       downloadButton.innerHTML =
-        "<span>↓</span> Download";
-    }
+        "<span>⟳</span> Processing...";
 
-  });
+      showMessage(
+        `Memproses ${platform}...`
+      );
+
+      try {
+
+        /* =========================
+           REQUEST BACKEND
+        ========================= */
+
+        const response = await fetch(
+          "/api/download",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              url: url,
+              platform: platform
+            })
+          }
+        );
+
+        let data;
+
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error(
+            "Response server bukan JSON."
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data.message ||
+            data.error ||
+            `Server error (${response.status})`
+          );
+        }
+
+        if (!data.success) {
+          throw new Error(
+            data.message ||
+            "Video gagal diproses."
+          );
+        }
+
+        /* =========================
+           CHECK DOWNLOAD URL
+        ========================= */
+
+        const downloadUrl =
+          data.downloadUrl ||
+          data.videoUrl;
+
+        if (!downloadUrl) {
+          throw new Error(
+            "URL video tidak ditemukan."
+          );
+        }
+
+        /* =========================
+           SUCCESS
+        ========================= */
+
+        showMessage(
+          "Berhasil! Download Video Tanpa WM"
+        );
+
+        /* =========================
+           DIRECT DOWNLOAD
+        ========================= */
+
+        const link =
+          document.createElement("a");
+
+        link.href = downloadUrl;
+
+        link.download =
+          data.filename ||
+          "video.mp4";
+
+        link.target = "_blank";
+
+        link.rel =
+          "noopener noreferrer";
+
+        link.style.display = "none";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+      } catch (error) {
+
+        console.error(
+          "Downloader error:",
+          error
+        );
+
+        showMessage(
+          error.message ||
+          "Gagal mengunduh video."
+        );
+
+      } finally {
+
+        processing = false;
+
+        downloadButton.disabled = false;
+
+        downloadButton.innerHTML =
+          "<span>↓</span> Download";
+      }
+    }
+  );
 
   /* =========================
      ENTER
@@ -275,7 +320,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         downloadButton?.click();
       }
-
     }
   );
 
