@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Downloader - Gallehs Project</title>
-
-  <meta
-    name="description"
-    content="Downloader Gallehs Project"
-  >
+  <meta name="description" content="Gallehs Project Media Downloader">
 
   <link rel="stylesheet" href="CSS/style.css">
   <link rel="stylesheet" href="CSS/download.css">
@@ -18,420 +13,230 @@
 
 <body>
 
-  <main class="download-page">
+<main class="download-page">
 
-    <!-- HEADER -->
-    <header class="download-header">
+  <header class="download-header">
+    <span class="eyebrow">GALLEHS PROJECT</span>
+    <h1>Media Downloader</h1>
+    <p>Download media dengan cepat dan mudah.</p>
+  </header>
 
-      <span>GALLEHS PROJECT</span>
+  <section class="download-box">
 
-      <h1>Downloader</h1>
+    <div class="download-heading">
+      <div class="download-icon">↓</div>
 
-      <p>
-        Download media dari platform yang tersedia.
-      </p>
-
-    </header>
-
-
-    <!-- DOWNLOADER -->
-    <section class="download-box">
-
-      <div class="download-icon">
-        ↓
+      <div>
+        <h2>Download Media</h2>
+        <p>Tempel link media yang ingin kamu download.</p>
       </div>
+    </div>
 
-      <h2>
-        Download Media
-      </h2>
+    <div class="download-input">
+      <input
+        type="url"
+        id="download-url"
+        placeholder="https://..."
+        autocomplete="off"
+      >
 
-      <p>
-        Masukkan link media yang ingin kamu download.
-      </p>
+      <button type="button" id="paste-button">
+        Paste
+      </button>
+    </div>
 
+    <div class="platform-label">
+      <span>PLATFORM</span>
+      <small>Pilih platform atau gunakan Auto</small>
+    </div>
 
-      <!-- URL INPUT -->
-      <div class="download-input">
+    <div class="download-platforms">
 
-        <input
-          type="url"
-          id="download-url"
-          placeholder="Tempel link di sini..."
-          autocomplete="off"
-        >
-
-        <button
-          type="button"
-          id="paste-button"
-        >
-          Paste
-        </button>
-
-      </div>
-
-
-      <!-- PLATFORM -->
-      <div class="download-platforms">
-
-        <!-- AUTO -->
-        <button
-          type="button"
-          class="platform-button active"
-          data-platform="auto"
-          aria-label="Auto"
-        >
-          <span>⚡</span>
-          <span>Auto</span>
-        </button>
-
-
-        <!-- TIKTOK -->
-        <button
-          type="button"
-          class="platform-button"
-          data-platform="tiktok"
-          aria-label="TikTok"
-        >
-          <span>♪</span>
-          <span>TikTok</span>
-        </button>
-
-
-        <!-- SPOTIFY -->
-        <button
-          type="button"
-          class="platform-button"
-          data-platform="spotify"
-          aria-label="Spotify"
-        >
-          <span>♫</span>
-          <span>Spotify</span>
-        </button>
-
-
-        <!-- YOUTUBE -->
-        <button
-          type="button"
-          class="platform-button coming-soon"
-          data-platform="youtube"
-          aria-label="YouTube"
-          disabled
-        >
-          <span>▶</span>
-          <span>YouTube</span>
-          <small>Coming Soon</small>
-        </button>
-
-
-        <!-- INSTAGRAM -->
-        <button
-          type="button"
-          class="platform-button coming-soon"
-          data-platform="instagram"
-          aria-label="Instagram"
-          disabled
-        >
-          <span>◎</span>
-          <span>Instagram</span>
-          <small>Coming Soon</small>
-        </button>
-
-
-        <!-- FACEBOOK -->
-        <button
-          type="button"
-          class="platform-button coming-soon"
-          data-platform="facebook"
-          aria-label="Facebook"
-          disabled
-        >
-          <span>f</span>
-          <span>Facebook</span>
-          <small>Coming Soon</small>
-        </button>
-
-      </div>
-
-
-      <!-- DOWNLOAD BUTTON -->
       <button
         type="button"
-        class="download-button"
-        id="download-button"
+        class="platform-button active"
+        data-platform="auto"
       >
-
-        <span>↓</span>
-
-        Download
-
+        <span class="platform-logo">✦</span>
+        <span class="platform-name">Auto</span>
+        <small>Detect</small>
       </button>
 
-
-      <!-- RESULT -->
-      <div
-        class="download-result"
-        id="download-result"
-        hidden
+      <button
+        type="button"
+        class="platform-button"
+        data-platform="tiktok"
       >
+        <span class="platform-logo">♪</span>
+        <span class="platform-name">TikTok</span>
+        <small>Available</small>
+      </button>
 
-        <div class="result-thumbnail">
+      <button
+        type="button"
+        class="platform-button"
+        data-platform="youtube"
+      >
+        <span class="platform-logo">▶</span>
+        <span class="platform-name">YouTube</span>
+        <small>MP4 / MP3</small>
+      </button>
 
-          <img
-            id="result-thumbnail"
-            src=""
-            alt="Thumbnail"
-          >
+      <button
+        type="button"
+        class="platform-button"
+        data-platform="instagram"
+      >
+        <span class="platform-logo">◎</span>
+        <span class="platform-name">Instagram</span>
+        <small>Available</small>
+      </button>
 
-        </div>
+      <button
+        type="button"
+        class="platform-button"
+        data-platform="facebook"
+      >
+        <span class="platform-logo">f</span>
+        <span class="platform-name">Facebook</span>
+        <small>Available</small>
+      </button>
 
-        <div class="result-info">
+      <button
+        type="button"
+        class="platform-button coming-soon"
+        data-platform="twitter"
+        disabled
+      >
+        <span class="platform-logo">𝕏</span>
+        <span class="platform-name">Twitter / X</span>
+        <small>Coming Soon</small>
+      </button>
 
-          <h3 id="result-title">
-            -
-          </h3>
+    </div>
 
-          <p id="result-author">
-            -
-          </p>
+    <button
+      type="button"
+      class="download-button"
+      id="download-button"
+    >
+      <span>↓</span>
+      Download
+    </button>
 
-          <p id="result-duration">
-            -
-          </p>
+    <div
+      class="download-message"
+      id="download-message"
+      aria-live="polite"
+    ></div>
 
-        </div>
+    <div
+      class="download-result"
+      id="download-result"
+      hidden
+    ></div>
 
-      </div>
+  </section>
 
+  <section class="supported-section">
 
-      <!-- MESSAGE -->
-      <div
-        class="download-message"
-        id="download-message"
-      ></div>
+    <div class="section-heading">
+      <span>STATUS</span>
+      <h2>Supported Platforms</h2>
+    </div>
 
-    </section>
+    <div class="supported-grid">
 
-
-    <!-- AVAILABLE PLATFORMS -->
-    <section class="supported-section">
-
-      <h2>
-        Available Platforms
-      </h2>
-
-      <div class="supported-grid">
-
-
-        <!-- TIKTOK -->
-        <div class="supported-card">
-
-          <span class="supported-logo">
-
-            <svg viewBox="0 0 24 24">
-              <path
-                d="M14.2 4.1c.5 2.1 1.8 3.4 3.9 3.6v2.5c-1.4 0-2.7-.4-3.8-1.1v5.8a5.3 5.3 0 1 1-5.3-5.3c.4 0 .8 0 1.2.1v2.7a2.7 2.7 0 1 0 1.5 2.5V4.1h2.5Z"
-                fill="currentColor"
-              />
-            </svg>
-
-          </span>
-
+      <div class="supported-card">
+        <div class="supported-icon">♪</div>
+        <div>
           <strong>TikTok</strong>
-
-          <small>Available</small>
-
+          <span class="status available">● Available</span>
         </div>
-
-
-        <!-- SPOTIFY -->
-        <div class="supported-card">
-
-          <span class="supported-logo">
-
-            <svg viewBox="0 0 24 24">
-              <circle
-                cx="12"
-                cy="12"
-                r="9"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-
-              <path
-                d="M7.5 10.2c3.2-1 6.2-.7 9 .5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-
-              <path
-                d="M8.2 13c2.7-.7 5.1-.4 7.3.5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-              />
-
-              <path
-                d="M9 15.6c2-.4 3.8-.2 5.5.5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.4"
-                stroke-linecap="round"
-              />
-
-            </svg>
-
-          </span>
-
-          <strong>Spotify</strong>
-
-          <small>Available</small>
-
-        </div>
-
-
-        <!-- YOUTUBE -->
-        <div class="supported-card coming-soon-card">
-
-          <span class="supported-logo">
-
-            <svg viewBox="0 0 24 24">
-              <path
-                d="M21.2 7.1a2.9 2.9 0 0 0-2-2C17.5 4.6 12 4.6 12 4.6s-5.5 0-7.2.5a2.9 2.9 0 0 0-2 2C2.3 8.8 2.3 12 2.3 12s0 3.2.5 4.9a2.9 2.9 0 0 0 2 2c1.7.5 7.2.5 7.2.5s5.5 0 7.2-.5a2.9 2.9 0 0 0 2-2c.5-1.7.5-4.9.5-4.9s0-3.2-.5-4.9Z"
-                fill="currentColor"
-              />
-            </svg>
-
-          </span>
-
-          <strong>YouTube</strong>
-
-          <small>Coming Soon</small>
-
-        </div>
-
-
-        <!-- INSTAGRAM -->
-        <div class="supported-card coming-soon-card">
-
-          <span class="supported-logo">
-
-            <svg viewBox="0 0 24 24">
-
-              <rect
-                x="3"
-                y="3"
-                width="18"
-                height="18"
-                rx="5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-
-              <circle
-                cx="12"
-                cy="12"
-                r="4"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-
-              <circle
-                cx="17.5"
-                cy="6.5"
-                r="1"
-                fill="currentColor"
-              />
-
-            </svg>
-
-          </span>
-
-          <strong>Instagram</strong>
-
-          <small>Coming Soon</small>
-
-        </div>
-
-
-        <!-- FACEBOOK -->
-        <div class="supported-card coming-soon-card">
-
-          <span class="supported-logo">
-
-            <svg viewBox="0 0 24 24">
-
-              <path
-                d="M14 21v-8h2.7l.4-3H14V8.1c0-.9.3-1.6 1.7-1.6h1.5V3.8c-.7-.1-1.5-.2-2.3-.2-2.4 0-4.1 1.5-4.1 4.2V10H8v3h2.8v8H14Z"
-                fill="currentColor"
-              />
-
-            </svg>
-
-          </span>
-
-          <strong>Facebook</strong>
-
-          <small>Coming Soon</small>
-
-        </div>
-
       </div>
 
-    </section>
+      <div class="supported-card">
+        <div class="supported-icon">▶</div>
+        <div>
+          <strong>YouTube</strong>
+          <span class="status available">● MP4 / MP3</span>
+        </div>
+      </div>
 
+      <div class="supported-card">
+        <div class="supported-icon">◎</div>
+        <div>
+          <strong>Instagram</strong>
+          <span class="status available">● Available</span>
+        </div>
+      </div>
 
-    <!-- HOW TO USE -->
-    <section class="download-info">
+      <div class="supported-card">
+        <div class="supported-icon">f</div>
+        <div>
+          <strong>Facebook</strong>
+          <span class="status available">● Available</span>
+        </div>
+      </div>
 
-      <h2>
-        Cara Menggunakan
-      </h2>
+      <div class="supported-card unavailable">
+        <div class="supported-icon">𝕏</div>
+        <div>
+          <strong>Twitter / X</strong>
+          <span class="status soon">● Coming Soon</span>
+        </div>
+      </div>
 
-      <ol>
+      <div class="supported-card unavailable">
+        <div class="supported-icon">◈</div>
+        <div>
+          <strong>More Platforms</strong>
+          <span class="status soon">● Coming Soon</span>
+        </div>
+      </div>
 
-        <li>
-          Salin link TikTok atau Spotify.
-        </li>
+    </div>
 
-        <li>
-          Tempel link pada kolom di atas.
-        </li>
+  </section>
 
-        <li>
-          Pilih TikTok atau Spotify.
-        </li>
+  <section class="download-info">
+    <span>HOW IT WORKS</span>
+    <h2>Cara Menggunakan</h2>
 
-        <li>
-          Tekan tombol Download.
-        </li>
+    <div class="steps">
 
-      </ol>
+      <div class="step">
+        <b>01</b>
+        <p>Salin link video atau media.</p>
+      </div>
 
-    </section>
+      <div class="step">
+        <b>02</b>
+        <p>Tempel link ke kolom downloader.</p>
+      </div>
 
+      <div class="step">
+        <b>03</b>
+        <p>Pilih platform jika diperlukan.</p>
+      </div>
 
-    <!-- FOOTER -->
-    <footer class="download-footer">
+      <div class="step">
+        <b>04</b>
+        <p>Tekan Download dan tunggu proses selesai.</p>
+      </div>
 
-      <p>
-        Gallehs Project
-      </p>
+    </div>
+  </section>
 
-    </footer>
+  <footer class="download-footer">
+    <p>Gallehs Project</p>
+    <span>Media Downloader</span>
+  </footer>
 
-  </main>
+</main>
 
-
-  <!-- NAVBAR -->
-
-  <script src="js/main.js"></script>
-  <script src="js/download.js"></script>
+<script src="js/download.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>
