@@ -1,0 +1,816 @@
+/* =================================
+   GALLEHS PROJECT - DOWNLOAD PAGE
+================================= */
+
+.download-page {
+    width: min(760px, calc(100% - 28px));
+    margin: 0 auto;
+    padding: 55px 0 140px;
+}
+
+
+/* =================================
+   HEADER
+================================= */
+
+.download-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.download-header > span {
+    display: block;
+    margin-bottom: 12px;
+    color: #a855f7;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+}
+
+.download-header h1 {
+    margin: 0 0 10px;
+
+    color: transparent;
+
+    background: linear-gradient(
+        110deg,
+        #ffffff 20%,
+        #ffffff 38%,
+        #a855f7 46%,
+        #d8b4fe 50%,
+        #ffffff 58%,
+        #ffffff 80%
+    );
+
+    background-size: 300% 100%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    font-size: 36px;
+    line-height: 1.2;
+
+    text-shadow:
+        0 0 5px rgba(255,255,255,.3),
+        0 0 14px rgba(168,85,247,.18);
+
+    animation: downloadTitleShine 6s linear infinite;
+}
+
+@keyframes downloadTitleShine {
+    0% {
+        background-position: 300% center;
+    }
+
+    100% {
+        background-position: -300% center;
+    }
+}
+
+.download-header p {
+    margin: 0;
+    color: #95899e;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =================================
+   DOWNLOAD CARD
+================================= */
+
+.download-box {
+    position: relative;
+
+    width: 100%;
+
+    padding: 28px 20px;
+
+    text-align: center;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,11,25,.98),
+            rgba(12,8,17,.98)
+        );
+
+    border: 1px solid #291a38;
+    border-radius: 22px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.22);
+}
+
+
+/* =================================
+   PURPLE SHINE CARD SAJA
+================================= */
+
+.download-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: -20%;
+    left: -120%;
+
+    width: 55%;
+    height: 140%;
+
+    background: linear-gradient(
+        110deg,
+        transparent,
+        rgba(168,85,247,.03),
+        rgba(168,85,247,.16),
+        rgba(216,180,254,.10),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+
+    pointer-events: none;
+
+    animation: boxOuterShine 7s ease-in-out infinite;
+}
+
+@keyframes boxOuterShine {
+
+    0% {
+        left: -120%;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    45% {
+        left: 130%;
+        opacity: 1;
+    }
+
+    60%,
+    100% {
+        left: 130%;
+        opacity: 0;
+    }
+}
+
+
+/* =================================
+   ICON
+================================= */
+
+.download-icon {
+    position: relative;
+    z-index: 2;
+
+    width: 50px;
+    height: 50px;
+
+    display: grid;
+    place-items: center;
+
+    margin: 0 auto 15px;
+
+    color: #c99bff;
+
+    background: #170d22;
+
+    border: 1px solid #43255d;
+    border-radius: 14px;
+
+    font-size: 25px;
+
+    box-shadow:
+        0 0 20px rgba(168,85,247,.08);
+}
+
+
+/* =================================
+   TEXT
+================================= */
+
+.download-box h2 {
+    position: relative;
+    z-index: 2;
+
+    margin: 0 0 8px;
+
+    color: #f8f5fb;
+
+    font-size: 19px;
+
+    text-shadow:
+        0 0 4px rgba(255,255,255,.45),
+        0 0 10px rgba(255,255,255,.15);
+}
+
+.download-box > p {
+    position: relative;
+    z-index: 2;
+
+    margin: 0 0 22px;
+
+    color: #95899e;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* =================================
+   LINK INPUT
+================================= */
+
+.download-input {
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+
+    width: 100%;
+
+    gap: 9px;
+
+    margin-bottom: 17px;
+}
+
+.download-input input {
+    min-width: 0;
+    flex: 1;
+
+    height: 57px;
+
+    padding: 0 17px;
+
+    color: #f8f5fb;
+
+    background: #0c0811;
+
+    border: 1px solid #291a38;
+    border-radius: 14px;
+
+    outline: none;
+
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.download-input input::placeholder {
+    color: #62586a;
+}
+
+.download-input input:focus {
+    border-color: #43255d;
+
+    box-shadow:
+        0 0 0 3px rgba(168,85,247,.05);
+}
+
+.download-input button {
+    flex: 0 0 95px;
+
+    height: 57px;
+
+    color: #c99bff;
+
+    background: #170d22;
+
+    border: 1px solid #291a38;
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+.download-input button:hover {
+    background: #21112f;
+    border-color: #43255d;
+}
+
+.download-input button:active {
+    transform: scale(.97);
+}
+
+
+/* =================================
+   PLATFORM GRID
+================================= */
+
+.download-platforms {
+    position: relative;
+    z-index: 3;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 9px;
+
+    margin-bottom: 17px;
+}
+
+
+/* =================================
+   PLATFORM BUTTON
+   SEMUANYA NORMAL
+================================= */
+
+.platform-button {
+    position: relative;
+
+    min-height: 78px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 9px 5px;
+
+    color: #95899e;
+
+    background: #100a17;
+
+    border: 1px solid #291a38;
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transition:
+        transform .2s ease,
+        color .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+}
+
+.platform-button svg {
+    width: 25px;
+    height: 25px;
+
+    flex-shrink: 0;
+
+    fill: currentColor;
+}
+
+.platform-button span {
+    font-size: 8px;
+    font-weight: 600;
+}
+
+
+/* HOVER */
+
+.platform-button:hover {
+    color: #c99bff;
+
+    border-color: #43255d;
+
+    background: #120c19;
+
+    transform: translateY(-2px);
+}
+
+
+/* =================================
+   ACTIVE
+   TETAP NORMAL
+================================= */
+
+.platform-button.active {
+    color: #95899e;
+
+    background: #100a17;
+
+    border-color: #291a38;
+
+    box-shadow: none;
+}
+
+.platform-button.active:hover {
+    color: #c99bff;
+
+    border-color: #43255d;
+
+    background: #120c19;
+}
+
+
+/* =================================
+   DOWNLOAD BUTTON
+================================= */
+
+.download-button {
+    position: relative;
+    z-index: 3;
+
+    width: 100%;
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    color: #fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a855f7,
+            #7c3aed
+        );
+
+    border: 1px solid rgba(216,180,254,.5);
+
+    border-radius: 13px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    box-shadow:
+        0 0 22px rgba(168,85,247,.2);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+.download-button:hover {
+    filter: brightness(1.08);
+
+    box-shadow:
+        0 0 30px rgba(168,85,247,.32);
+
+    transform: translateY(-2px);
+}
+
+.download-button:active {
+    transform: scale(.98);
+}
+
+.download-button span {
+    font-size: 18px;
+}
+
+
+/* =================================
+   RESULT
+================================= */
+
+.download-result {
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+
+    gap: 13px;
+
+    margin-top: 15px;
+
+    padding: 12px;
+
+    text-align: left;
+
+    background: #0c0811;
+
+    border: 1px solid #291a38;
+    border-radius: 13px;
+}
+
+.download-result[hidden] {
+    display: none;
+}
+
+.result-thumbnail {
+    width: 90px;
+    height: 60px;
+
+    flex: 0 0 90px;
+
+    overflow: hidden;
+
+    background: #170d22;
+
+    border-radius: 9px;
+}
+
+.result-thumbnail img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+.result-info {
+    min-width: 0;
+}
+
+.result-info h3 {
+    margin: 0 0 5px;
+
+    color: #f8f5fb;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.result-info p {
+    margin: 3px 0;
+
+    color: #95899e;
+
+    font-size: 8px;
+}
+
+
+/* =================================
+   MESSAGE
+================================= */
+
+.download-message {
+    position: relative;
+    z-index: 3;
+
+    min-height: 16px;
+
+    margin-top: 10px;
+
+    color: #95899e;
+
+    font-size: 9px;
+}
+
+
+/* =================================
+   SUPPORTED PLATFORMS
+================================= */
+
+.supported-section {
+    margin-top: 35px;
+}
+
+.supported-section > h2,
+.download-info > h2 {
+    margin: 0 0 13px;
+
+    color: #f8f5fb;
+
+    font-size: 16px;
+
+    text-shadow:
+        0 0 4px rgba(255,255,255,.4),
+        0 0 10px rgba(255,255,255,.12);
+}
+
+.supported-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 9px;
+}
+
+.supported-card {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 80px;
+
+    color: #95899e;
+
+    background: #100a17;
+
+    border: 1px solid #291a38;
+    border-radius: 13px;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        color .2s ease;
+}
+
+.supported-card:hover {
+    transform: translateY(-2px);
+
+    color: #c99bff;
+
+    border-color: #43255d;
+}
+
+.supported-logo {
+    width: 25px;
+    height: 25px;
+
+    display: grid;
+    place-items: center;
+}
+
+.supported-logo svg {
+    width: 100%;
+    height: 100%;
+
+    fill: currentColor;
+}
+
+.supported-card strong {
+    font-size: 8px;
+}
+
+
+/* =================================
+   HOW TO USE
+================================= */
+
+.download-info {
+    margin-top: 25px;
+
+    padding: 20px;
+
+    background: rgba(255,255,255,.025);
+
+    border: 1px solid #291a38;
+    border-radius: 15px;
+}
+
+.download-info ol {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.download-info li {
+    margin: 8px 0;
+
+    color: #95899e;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* =================================
+   FOOTER
+================================= */
+
+.download-footer {
+    margin-top: 22px;
+
+    text-align: center;
+}
+
+.download-footer p {
+    color: #51465b;
+
+    font-size: 8px;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 600px) {
+
+    .download-page {
+        width: calc(100% - 20px);
+
+        padding: 38px 0 125px;
+    }
+
+    .download-header h1 {
+        font-size: 30px;
+    }
+
+    .download-box {
+        padding: 24px 14px;
+    }
+
+    .download-input {
+        flex-direction: column;
+        gap: 9px;
+    }
+
+    .download-input input {
+        width: 100%;
+        height: 57px;
+
+        font-size: 14px;
+        padding: 0 17px;
+    }
+
+    .download-input button {
+        width: 100%;
+        height: 52px;
+        flex: none;
+    }
+
+    .download-platforms {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 8px;
+    }
+
+    .platform-button {
+        min-height: 82px;
+    }
+
+    .platform-button svg {
+        width: 27px;
+        height: 27px;
+    }
+
+    .platform-button span {
+        font-size: 9px;
+    }
+
+    .supported-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+/* =================================
+   SMALL PHONE
+================================= */
+
+@media (max-width: 380px) {
+
+    .download-page {
+        width: calc(100% - 16px);
+    }
+
+    .download-box {
+        padding: 21px 12px;
+    }
+
+    .download-platforms {
+        gap: 7px;
+    }
+
+    .platform-button {
+        min-height: 76px;
+    }
+
+    .download-result {
+        flex-direction: column;
+    }
+
+    .result-thumbnail {
+        width: 100%;
+        height: 140px;
+    }
+}
+
+
+/* =================================
+   REDUCED MOTION
+================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .download-header h1,
+    .download-box::before {
+        animation: none;
+    }
+}
