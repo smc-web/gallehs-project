@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     // REQUEST
     // =========================
 
-    const { url, platform } = req.body || {};
+    const { url } = req.body || {};
 
     if (!url) {
       return res.status(400).json({
@@ -58,32 +58,42 @@ export default async function handler(req, res) {
     }
 
     // =========================
-    // TIKTOK
+    // PLATFORM
     // =========================
 
-    const isTikTok =
-      platform === "tiktok" ||
-      /(^|\.)tiktok\.com$/i.test(
-        new URL(targetURL).hostname
-      ) ||
-      /(^|\.)vt\.tiktok\.com$/i.test(
-        new URL(targetURL).hostname
-      );
+    const hostname =
+      new URL(targetURL).hostname.toLowerCase();
 
-    if (!isTikTok) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Saat ini API yang dipasang baru mendukung TikTok."
-      });
+    let platform = "unknown";
+
+    if (
+      hostname.includes("tiktok.com") ||
+      hostname.includes("vt.tiktok.com")
+    ) {
+      platform = "tiktok";
+    } else if (
+      hostname.includes("youtube.com") ||
+      hostname.includes("youtu.be")
+    ) {
+      platform = "youtube";
+    } else if (
+      hostname.includes("instagram.com") ||
+      hostname.includes("instagr.am")
+    ) {
+      platform = "instagram";
+    } else if (
+      hostname.includes("facebook.com") ||
+      hostname.includes("fb.watch")
+    ) {
+      platform = "facebook";
     }
 
     // =========================
-    // SAIPULANUAR API
+    // ELYSIAN API
     // =========================
 
     const apiURL =
-      "https://api.saipulanuar.eu.org/api/download/ttdl?url=" +
+      "https://elysian-api.vercel.app/api/downloader/all-in-one.php?url=" +
       encodeURIComponent(targetURL);
 
     const response = await fetch(apiURL, {
@@ -97,7 +107,7 @@ export default async function handler(req, res) {
       return res.status(502).json({
         success: false,
         message:
-          `API TikTok mengembalikan HTTP ${response.status}.`
+          `Elysian API mengembalikan HTTP ${response.status}.`
       });
     }
 
@@ -107,43 +117,68 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // =========================
-    // CHECK API STATUS
-    // =========================
-
     if (!data || data.status !== true) {
       return res.status(400).json({
         success: false,
         message:
-          "TikTok gagal diproses oleh API."
+          data?.message ||
+          "Media gagal diproses oleh Elysian API."
       });
     }
+
+    // =========================
+    // RESULT
+    // =========================
 
     const result = data.result || {};
 
     // =========================
-    // VIDEO
+    // MEDIA
     // =========================
 
-    const videoUrl =
-      Array.isArray(result.video)
-        ? result.video[0]
-        : null;
+    const media = Array.isArray(result.media)
+      ? result.media
+      : [];
+
+    if (media.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Elysian API tidak memberikan URL media untuk link ini."
+      });
+    }
 
     // =========================
-    // AUDIO
+    // CARI VIDEO
     // =========================
 
-    const audioUrl =
-      Array.isArray(result.audio)
-        ? result.audio[0]
-        : null;
+    let videoUrl = null;
+
+    for (const item of media) {
+      if (typeof item === "string") {
+        videoUrl = item;
+        break;
+      }
+
+      if (item && typeof item === "object") {
+        const candidate =
+          item.url ||
+          item.download ||
+          item.link ||
+          item.src;
+
+        if (candidate) {
+          videoUrl = candidate;
+          break;
+        }
+      }
+    }
 
     if (!videoUrl) {
       return res.status(404).json({
         success: false,
         message:
-          "URL video TikTok tidak ditemukan."
+          "URL video tidak ditemukan di media Elysian API."
       });
     }
 
@@ -154,27 +189,35 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
 
-      platform: "tiktok",
+      platform:
+        data.platform ||
+        platform,
 
       title:
-        result.title_audio ||
-        "TikTok Video",
+        result.title ||
+        result.name ||
+        "Video",
 
-      author: "-",
+      author:
+        result.author ||
+        result.username ||
+        result.uploader ||
+        "-",
 
-      duration: "-",
+      duration:
+        result.duration ||
+        "-",
 
       thumbnail:
-        result.thumbnail || "",
+        result.thumbnail ||
+        result.thumb ||
+        "",
 
       downloadUrl:
         videoUrl,
 
       videoUrl:
         videoUrl,
-
-      audioUrl:
-        audioUrl,
 
       qualities: [
         {
@@ -186,14 +229,14 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error(
-      "TIKTOK DOWNLOAD ERROR:",
+      "ELYSIAN DOWNLOAD ERROR:",
       error
     );
 
     return res.status(500).json({
       success: false,
       message:
-        "Terjadi kesalahan saat menghubungi API TikTok.",
+        "Terjadi kesalahan saat menghubungi Elysian API.",
       error: error.message
     });
   }
