@@ -1,18 +1,9 @@
 export default async function handler(req, res) {
-  // =========================================
-  // CORS
-  // =========================================
-
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "*"
-  );
-
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
     "POST, OPTIONS"
   );
-
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Content-Type"
@@ -22,11 +13,6 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-
-  // =========================================
-  // METHOD
-  // =========================================
-
   if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
@@ -34,18 +20,8 @@ export default async function handler(req, res) {
     });
   }
 
-
   try {
-
-    // =========================================
-    // REQUEST
-    // =========================================
-
-    const {
-      url,
-      platform
-    } = req.body || {};
-
+    const { url, platform } = req.body || {};
 
     if (!url) {
       return res.status(400).json({
@@ -54,273 +30,186 @@ export default async function handler(req, res) {
       });
     }
 
-
-    // =========================================
-    // VALIDATE URL
-    // =========================================
-
     let targetURL;
 
     try {
-
-      targetURL =
-        new URL(url).href;
-
+      targetURL = new URL(url).href;
     } catch {
-
       return res.status(400).json({
         success: false,
         message: "Link tidak valid."
       });
-
     }
 
-
     const hostname =
-      new URL(targetURL)
-        .hostname
-        .toLowerCase();
+      new URL(targetURL).hostname.toLowerCase();
 
+    let selected = platform || "auto";
 
-    // =========================================
-    // DETECT PLATFORM
-    // =========================================
+    // ================================
+    // AUTO DETECT
+    // ================================
 
-    let detectedPlatform =
-      platform || "auto";
+    if (selected === "auto") {
 
+      if (hostname.includes("tiktok.com")) {
+        selected = "tiktok";
 
-    if (detectedPlatform === "auto") {
-
-      if (
-        hostname.includes("tiktok.com")
-      ) {
-
-        detectedPlatform = "tiktok";
-
-      } else if (
-        hostname.includes("spotify.com")
-      ) {
-
-        detectedPlatform = "spotify";
+      } else if (hostname.includes("spotify.com")) {
+        selected = "spotify";
 
       } else if (
         hostname.includes("youtube.com") ||
         hostname.includes("youtu.be")
       ) {
-
-        detectedPlatform = "youtube";
+        selected = "youtube";
 
       } else if (
         hostname.includes("instagram.com") ||
         hostname.includes("instagr.am")
       ) {
-
-        detectedPlatform = "instagram";
+        selected = "instagram";
 
       } else if (
         hostname.includes("facebook.com") ||
         hostname.includes("fb.watch")
       ) {
-
-        detectedPlatform = "facebook";
+        selected = "facebook";
 
       } else {
-
-        detectedPlatform = null;
-
+        selected = null;
       }
-
     }
 
-
-    // =========================================
+    // ================================
     // UNSUPPORTED
-    // =========================================
+    // ================================
 
-    if (!detectedPlatform) {
-
+    if (!selected) {
       return res.status(400).json({
         success: false,
-        message:
-          "Platform tidak didukung."
+        message: "Platform tidak didukung."
       });
-
     }
 
-
-    // =========================================
+    // ================================
     // COMING SOON
-    // =========================================
+    // ================================
 
     if (
-      detectedPlatform === "youtube" ||
-      detectedPlatform === "instagram" ||
-      detectedPlatform === "facebook"
+      selected === "youtube" ||
+      selected === "instagram" ||
+      selected === "facebook"
     ) {
-
       return res.status(400).json({
         success: false,
         message:
-          `${detectedPlatform} masih Coming Soon.`
+          `${selected} masih Coming Soon.`
       });
-
     }
 
-
-    // =========================================
+    // ================================
     // TIKTOK
-    // ELYSIAN ALL-IN-ONE
-    // =========================================
+    // ================================
 
-    if (detectedPlatform === "tiktok") {
+    if (selected === "tiktok") {
 
       const apiURL =
         "https://elysian-api.vercel.app/api/downloader/all-in-one.php?url=" +
         encodeURIComponent(targetURL);
 
-
       const response =
         await fetch(apiURL, {
-          method: "GET",
-
           headers: {
-            Accept:
-              "application/json"
+            Accept: "application/json"
           }
         });
 
-
       if (!response.ok) {
-
         return res.status(502).json({
           success: false,
           message:
             `API TikTok error (${response.status}).`
         });
-
       }
-
 
       const data =
         await response.json();
 
-
-      if (!data) {
-
+      if (data?.status !== true) {
         return res.status(400).json({
           success: false,
           message:
-            "API TikTok tidak memberikan response."
+            "TikTok gagal diproses."
         });
-
       }
-
-
-      // =========================================
-      // RESULT
-      // =========================================
 
       const result =
         data.result || {};
 
+      // API All-In-One menggunakan media
+      const media =
+        Array.isArray(result.media)
+          ? result.media
+          : [];
 
-      /*
-       * API bisa mempunyai struktur
-       * berbeda tergantung provider.
-       *
-       * Kita coba beberapa kemungkinan
-       * nama field video.
-       */
+      let videoUrl = null;
 
-      let videoUrl =
-        result.video ||
-        result.videoUrl ||
-        result.downloadUrl ||
-        result.download_url ||
-        result.url ||
-        null;
+      // Cari URL dari media
+      for (const item of media) {
 
+        if (typeof item === "string") {
+          videoUrl = item;
+          break;
+        }
 
-      // Kalau berupa array
-      if (
-        Array.isArray(videoUrl)
-      ) {
+        if (
+          item &&
+          typeof item === "object"
+        ) {
+          videoUrl =
+            item.url ||
+            item.downloadUrl ||
+            item.download_url ||
+            item.video ||
+            item.videoUrl ||
+            null;
 
-        videoUrl =
-          videoUrl[0] || null;
-
+          if (videoUrl) break;
+        }
       }
 
-
-      // =========================================
-      // THUMBNAIL
-      // =========================================
-
-      const thumbnail =
-        result.thumbnail ||
-        result.thumb ||
-        result.cover ||
-        "";
-
-
-      // =========================================
-      // TITLE
-      // =========================================
-
-      const title =
-        result.title ||
-        result.desc ||
-        result.description ||
-        "TikTok Video";
-
-
-      // =========================================
-      // AUTHOR
-      // =========================================
-
-      const author =
-        result.author ||
-        result.username ||
-        result.nickname ||
-        "-";
-
-
-      // =========================================
-      // VIDEO CHECK
-      // =========================================
+      // ================================
+      // MEDIA KOSONG
+      // ================================
 
       if (!videoUrl) {
-
         return res.status(404).json({
           success: false,
           message:
-            "URL video TikTok tidak ditemukan dari API."
+            "API TikTok tidak memberikan URL video.",
+          platform: "tiktok",
+          apiStatus: data.status,
+          mediaCount: media.length
         });
-
       }
 
-
-      // =========================================
-      // RESPONSE TIKTOK
-      // =========================================
-
       return res.status(200).json({
-
         success: true,
-
         platform: "tiktok",
 
-        title: title,
+        title:
+          result.title ||
+          "TikTok Video",
 
-        author: author,
-
-        duration:
-          result.duration ||
+        author:
+          result.author ||
+          result.username ||
           "-",
 
         thumbnail:
-          thumbnail,
+          result.thumbnail ||
+          "",
 
         downloadUrl:
           videoUrl,
@@ -330,137 +219,85 @@ export default async function handler(req, res) {
 
         filename:
           "tiktok-video.mp4"
-
       });
-
     }
 
-
-    // =========================================
+    // ================================
     // SPOTIFY
-    // =========================================
+    // ================================
 
-    if (detectedPlatform === "spotify") {
+    if (selected === "spotify") {
 
       const apiURL =
         "https://elysian-api.vercel.app/api/downloader/spotify-dl.php?url=" +
         encodeURIComponent(targetURL);
 
-
       const response =
         await fetch(apiURL, {
-          method: "GET",
-
           headers: {
-            Accept:
-              "application/json"
+            Accept: "application/json"
           }
         });
 
-
       if (!response.ok) {
-
         return res.status(502).json({
           success: false,
           message:
             `API Spotify error (${response.status}).`
         });
-
       }
-
 
       const data =
         await response.json();
 
-
-      // =========================================
-      // METADATA
-      // =========================================
+      if (data?.status !== true) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Spotify gagal diproses."
+        });
+      }
 
       const metadata =
-        data.metadata ||
-        data.result?.metadata ||
-        {};
-
-
-      // =========================================
-      // DOWNLOAD URL
-      // =========================================
+        data.metadata || {};
 
       const downloadUrl =
-        data.download_url ||
-        data.downloadUrl ||
-        data.result?.download_url ||
-        data.result?.downloadUrl ||
-        data.result?.url ||
-        null;
-
+        data.download_url;
 
       if (!downloadUrl) {
-
         return res.status(404).json({
           success: false,
           message:
             "URL audio Spotify tidak ditemukan."
         });
-
       }
 
-
-      // =========================================
-      // SONG NAME
-      // =========================================
-
-      const songName =
+      const song =
         metadata.name ||
-        data.name ||
-        data.title ||
         "Spotify Audio";
-
-
-      // =========================================
-      // ARTIST
-      // =========================================
 
       const artist =
         metadata.artist ||
-        data.artist ||
-        "-";
+        "Unknown Artist";
 
-
-      // =========================================
-      // IMAGE
-      // =========================================
-
-      const image =
-        metadata.image ||
-        data.image ||
-        "";
-
-
-      // =========================================
-      // RESPONSE SPOTIFY
-      // =========================================
+      const filename =
+        `${song} - ${artist}`
+          .replace(/[\\/:*?"<>|]/g, "")
+          .trim() +
+        ".mp3";
 
       return res.status(200).json({
-
         success: true,
-
         platform: "spotify",
 
-        title:
-          songName,
-
-        author:
-          artist,
+        title: song,
+        author: artist,
 
         duration:
-          metadata.duration ||
-          data.duration ||
-          "-",
+          metadata.duration || "-",
 
         thumbnail:
-          image,
+          metadata.image || "",
 
         downloadUrl:
           downloadUrl,
@@ -469,21 +306,9 @@ export default async function handler(req, res) {
           downloadUrl,
 
         filename:
-          `${songName
-            .replace(
-              /[\\/:*?"<>|]/g,
-              ""
-            )
-            .trim() || "spotify-audio"}.mp3`
-
+          filename
       });
-
     }
-
-
-    // =========================================
-    // UNKNOWN
-    // =========================================
 
     return res.status(400).json({
       success: false,
@@ -491,27 +316,19 @@ export default async function handler(req, res) {
         "Platform belum didukung."
     });
 
-
   } catch (error) {
 
     console.error(
-      "DOWNLOAD API ERROR:",
+      "DOWNLOAD ERROR:",
       error
     );
 
-
     return res.status(500).json({
-
       success: false,
-
       message:
         "Terjadi kesalahan pada server.",
-
       error:
         error.message
-
     });
-
   }
-
 }
