@@ -1,125 +1,94 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const urlInput =
+  const input =
     document.getElementById("download-url");
 
-  const pasteButton =
+  const paste =
     document.getElementById("paste-button");
 
-  const downloadButton =
+  const button =
     document.getElementById("download-button");
-
-  const resultBox =
-    document.getElementById("download-result");
 
   const message =
     document.getElementById("download-message");
 
-  const platformButtons =
+  const result =
+    document.getElementById("download-result");
+
+  const platforms =
     document.querySelectorAll(".platform-button");
 
-  let selectedPlatform = "auto";
-  let processing = false;
+  let selected = "auto";
+  let loading = false;
 
 
-  // =================================
-  // MESSAGE
-  // =================================
-
-  function showMessage(text) {
-
+  function msg(text) {
     if (message) {
       message.textContent = text;
     }
-
   }
 
 
-  // =================================
-  // DETECT PLATFORM
-  // =================================
+  function detect(url) {
 
-  function detectPlatform(url) {
+    const u = url.toLowerCase();
 
-    const value =
-      url.toLowerCase();
-
-    if (
-      value.includes("tiktok.com") ||
-      value.includes("vt.tiktok.com")
-    ) {
+    if (u.includes("tiktok.com"))
       return "tiktok";
-    }
 
     if (
-      value.includes("spotify.com") ||
-      value.includes("spotify.link")
-    ) {
+      u.includes("spotify.com") ||
+      u.includes("spotify.link")
+    )
       return "spotify";
-    }
 
     if (
-      value.includes("youtube.com") ||
-      value.includes("youtu.be")
-    ) {
+      u.includes("youtube.com") ||
+      u.includes("youtu.be")
+    )
       return "youtube";
-    }
 
     if (
-      value.includes("instagram.com") ||
-      value.includes("instagr.am")
-    ) {
+      u.includes("instagram.com") ||
+      u.includes("instagr.am")
+    )
       return "instagram";
-    }
 
     if (
-      value.includes("facebook.com") ||
-      value.includes("fb.watch")
-    ) {
+      u.includes("facebook.com") ||
+      u.includes("fb.watch")
+    )
       return "facebook";
-    }
 
     return null;
   }
 
 
-  // =================================
-  // PLATFORM BUTTON
-  // =================================
+  platforms.forEach(btn => {
 
-  platformButtons.forEach(button => {
+    btn.addEventListener("click", () => {
 
-    button.addEventListener(
-      "click",
-      () => {
+      platforms.forEach(x =>
+        x.classList.remove("active")
+      );
 
-        platformButtons.forEach(item => {
-          item.classList.remove("active");
-        });
+      btn.classList.add("active");
 
-        button.classList.add("active");
+      selected =
+        btn.dataset.platform || "auto";
 
-        selectedPlatform =
-          button.dataset.platform ||
-          "auto";
+      msg(
+        selected === "auto"
+          ? "Platform otomatis."
+          : `Platform: ${selected}`
+      );
 
-        showMessage(
-          selectedPlatform === "auto"
-            ? "Platform otomatis."
-            : `Platform: ${selectedPlatform}`
-        );
-
-      }
-    );
+    });
 
   });
 
 
-  // =================================
-  // PASTE
-  // =================================
-
-  pasteButton?.addEventListener(
+  paste?.addEventListener(
     "click",
     async () => {
 
@@ -129,39 +98,25 @@ document.addEventListener("DOMContentLoaded", () => {
           await navigator.clipboard.readText();
 
         if (!text) {
-
-          showMessage(
-            "Clipboard kosong."
-          );
-
+          msg("Clipboard kosong.");
           return;
         }
 
-        urlInput.value = text;
+        input.value = text;
 
         const platform =
-          detectPlatform(text);
+          detect(text);
 
-        if (platform) {
+        msg(
+          platform
+            ? `Link ${platform} terdeteksi.`
+            : "Link berhasil ditempel."
+        );
 
-          showMessage(
-            `Link ${platform} terdeteksi.`
-          );
+      } catch {
 
-        } else {
-
-          showMessage(
-            "Link berhasil ditempel."
-          );
-
-        }
-
-      } catch (error) {
-
-        console.error(error);
-
-        showMessage(
-          "Tidak bisa membaca clipboard. Tempel link secara manual."
+        msg(
+          "Gagal membaca clipboard."
         );
 
       }
@@ -170,191 +125,67 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  // =================================
-  // HIDE RESULT
-  // =================================
-
-  function hideResult() {
-
-    if (!resultBox) return;
-
-    resultBox.hidden = true;
-
-    resultBox.style.display = "none";
-
-  }
-
-
-  // =================================
-  // DOWNLOAD URL
-  // =================================
-
-  function startDownload(
-    downloadUrl,
-    filename
-  ) {
-
-    if (!downloadUrl) {
-
-      throw new Error(
-        "URL download tidak ditemukan."
-      );
-
-    }
-
-
-    const link =
-      document.createElement("a");
-
-
-    link.href =
-      downloadUrl;
-
-
-    link.download =
-      filename || "download";
-
-
-    link.target =
-      "_blank";
-
-
-    link.rel =
-      "noopener noreferrer";
-
-
-    link.style.display =
-      "none";
-
-
-    document.body.appendChild(
-      link
-    );
-
-
-    link.click();
-
-
-    link.remove();
-
-  }
-
-
-  // =================================
-  // DOWNLOAD
-  // =================================
-
-  downloadButton?.addEventListener(
+  button?.addEventListener(
     "click",
     async () => {
 
-      if (processing) return;
-
+      if (loading) return;
 
       const url =
-        urlInput.value.trim();
-
-
-      // =============================
-      // EMPTY
-      // =============================
+        input.value.trim();
 
       if (!url) {
-
-        showMessage(
+        msg(
           "Masukkan link terlebih dahulu."
         );
-
-        urlInput.focus();
-
         return;
       }
 
-
-      // =============================
-      // URL CHECK
-      // =============================
-
-      if (
-        !/^https?:\/\//i.test(url)
-      ) {
-
-        showMessage(
-          "Link tidak valid."
-        );
-
+      if (!/^https?:\/\//i.test(url)) {
+        msg("Link tidak valid.");
         return;
       }
 
-
-      // =============================
-      // PLATFORM
-      // =============================
-
-      let platform =
-        selectedPlatform;
-
+      let platform = selected;
 
       if (platform === "auto") {
-
-        platform =
-          detectPlatform(url);
-
-        if (!platform) {
-
-          showMessage(
-            "Platform tidak didukung."
-          );
-
-          return;
-        }
-
+        platform = detect(url);
       }
 
-
-      // =============================
-      // COMING SOON
-      // =============================
+      if (!platform) {
+        msg(
+          "Platform tidak didukung."
+        );
+        return;
+      }
 
       if (
         platform === "youtube" ||
         platform === "instagram" ||
         platform === "facebook"
       ) {
-
-        showMessage(
+        msg(
           `${platform} masih Coming Soon.`
         );
-
         return;
       }
 
+      loading = true;
 
-      // =============================
-      // START
-      // =============================
+      if (result) {
+        result.hidden = true;
+      }
 
-      processing = true;
+      button.disabled = true;
 
-      hideResult();
-
-      downloadButton.disabled =
-        true;
-
-      downloadButton.innerHTML =
+      button.innerHTML =
         "<span>⟳</span> Processing...";
 
-
-      showMessage(
+      msg(
         `Memproses ${platform}...`
       );
 
-
       try {
-
-        // =============================
-        // CALL BACKEND
-        // =============================
 
         const response =
           await fetch(
@@ -368,170 +199,105 @@ document.addEventListener("DOMContentLoaded", () => {
               },
 
               body: JSON.stringify({
-                url: url,
-                platform: platform
+                url,
+                platform
               })
             }
           );
 
-
-        // =============================
-        // JSON
-        // =============================
-
-        let data;
-
-        try {
-
-          data =
-            await response.json();
-
-        } catch {
-
-          throw new Error(
-            "Response API bukan JSON."
-          );
-
-        }
-
+        const data =
+          await response.json();
 
         console.log(
-          "DOWNLOAD API RESPONSE:",
+          "DOWNLOAD RESPONSE:",
           data
         );
 
-
-        // =============================
-        // ERROR
-        // =============================
-
-        if (!response.ok) {
+        if (!response.ok ||
+            !data.success) {
 
           throw new Error(
             data.message ||
-            data.error ||
-            `Server error (${response.status})`
+            "Download gagal."
           );
-
         }
 
-
-        if (!data.success) {
-
-          throw new Error(
-            data.message ||
-            "Media gagal diproses."
-          );
-
-        }
-
-
-        // =============================
-        // DOWNLOAD URL
-        // =============================
-
-        const downloadUrl =
-          data.downloadUrl;
-
-
-        if (!downloadUrl) {
-
-          console.error(
-            "Response tidak memiliki downloadUrl:",
-            data
-          );
-
+        if (!data.downloadUrl) {
           throw new Error(
             "URL media tidak ditemukan."
           );
-
         }
 
 
-        // =============================
-        // TIKTOK
-        // =============================
+        // ==========================
+        // DOWNLOAD
+        // ==========================
 
-        if (
-          data.platform === "tiktok"
-        ) {
+        const a =
+          document.createElement("a");
 
-          startDownload(
-            downloadUrl,
-            data.filename ||
-            "tiktok-video.mp4"
+        a.href =
+          data.downloadUrl;
+
+        a.download =
+          data.filename ||
+          (
+            platform === "spotify"
+              ? "spotify-audio.mp3"
+              : "tiktok-video.mp4"
           );
 
+        a.target = "_blank";
 
-          showMessage(
+        a.rel =
+          "noopener noreferrer";
+
+        a.style.display = "none";
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        a.remove();
+
+
+        // ==========================
+        // SUCCESS
+        // ==========================
+
+        if (platform === "tiktok") {
+
+          msg(
             "Berhasil! Download Video Tanpa WM"
           );
 
-        }
+        } else {
 
-
-        // =============================
-        // SPOTIFY
-        // =============================
-
-        else if (
-          data.platform === "spotify"
-        ) {
-
-          startDownload(
-            downloadUrl,
-            data.filename ||
-            "spotify-audio.mp3"
-          );
-
-
-          showMessage(
+          msg(
             "Berhasil! Download Audio Spotify"
           );
 
         }
 
-
-        // =============================
-        // UNKNOWN
-        // =============================
-
-        else {
-
-          startDownload(
-            downloadUrl,
-            data.filename ||
-            "download"
-          );
-
-
-          showMessage(
-            "Berhasil! Download selesai."
-          );
-
-        }
-
-
       } catch (error) {
 
         console.error(
-          "Downloader error:",
+          "DOWNLOAD ERROR:",
           error
         );
 
-        showMessage(
+        msg(
           error.message ||
-          "Gagal menghubungi server."
+          "Gagal mengunduh media."
         );
 
       } finally {
 
-        processing = false;
+        loading = false;
 
-        downloadButton.disabled =
-          false;
+        button.disabled = false;
 
-        downloadButton.innerHTML =
+        button.innerHTML =
           "<span>↓</span> Download";
 
       }
@@ -540,30 +306,16 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  // =================================
-  // ENTER
-  // =================================
-
-  urlInput?.addEventListener(
+  input?.addEventListener(
     "keydown",
-    event => {
+    e => {
 
-      if (event.key === "Enter") {
-
-        event.preventDefault();
-
-        downloadButton?.click();
-
+      if (e.key === "Enter") {
+        e.preventDefault();
+        button?.click();
       }
 
     }
   );
-
-
-  // =================================
-  // INITIAL
-  // =================================
-
-  hideResult();
 
 });
