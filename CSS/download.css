@@ -1,828 +1,587 @@
-/* =================================
-   GALLEHS PROJECT - DOWNLOAD PAGE
-================================= */
+/* =========================================
+   GALLEHS PROJECT — DOWNLOAD
+========================================= */
 
 .download-page {
-    width: min(760px, calc(100% - 28px));
-    margin: 0 auto;
-    padding: 55px 0 140px;
+  width: 100%;
+  max-width: 1050px;
+  margin: auto;
+  padding: 60px 20px 120px;
 }
 
-
-/* =================================
-   HEADER
-================================= */
+/* HEADER */
 
 .download-header {
-    text-align: center;
-    margin-bottom: 35px;
+  text-align: center;
+  margin-bottom: 38px;
 }
 
-.download-header > span {
-    display: block;
-    margin-bottom: 12px;
+.download-header .eyebrow,
+.section-heading > span,
+.download-info > span {
+  display: block;
+  margin-bottom: 10px;
 
-    color: #a855f7;
-
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 4px;
+  color: #a855f7;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 4px;
 }
 
 .download-header h1 {
-    margin: 0 0 10px;
+  margin: 0;
 
-    color: transparent;
+  color: #fff;
+  font-size: clamp(30px, 5vw, 42px);
+  font-weight: 800;
 
-    background: linear-gradient(
-        110deg,
-        #ffffff 20%,
-        #ffffff 38%,
-        #a855f7 46%,
-        #d8b4fe 50%,
-        #ffffff 58%,
-        #ffffff 80%
-    );
-
-    background-size: 300% 100%;
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    font-size: 36px;
-    line-height: 1.2;
-
-    text-shadow:
-        0 0 5px rgba(255,255,255,.3),
-        0 0 14px rgba(168,85,247,.18);
-
-    animation: downloadTitleShine 6s linear infinite;
-}
-
-@keyframes downloadTitleShine {
-    0% {
-        background-position: 300% center;
-    }
-
-    100% {
-        background-position: -300% center;
-    }
+  text-shadow:
+    0 0 7px rgba(255,255,255,.5),
+    0 0 22px rgba(168,85,247,.35);
 }
 
 .download-header p {
-    margin: 0;
+  margin: 12px 0 0;
 
-    color: #95899e;
-
-    font-size: 13px;
-    line-height: 1.6;
+  color: #929292;
+  font-size: 14px;
 }
 
 
-/* =================================
-   DOWNLOAD CARD
-================================= */
+/* MAIN BOX */
 
 .download-box {
-    position: relative;
+  position: relative;
 
-    width: 100%;
+  padding: 30px;
 
-    padding: 28px 20px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 24px;
 
-    text-align: center;
+  background: rgba(255,255,255,.035);
 
-    overflow: hidden;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(18,11,25,.98),
-            rgba(12,8,17,.98)
-        );
+  overflow: hidden;
+}
 
-    border: 1px solid #291a38;
-    border-radius: 22px;
+.download-box::after {
+  content: "";
 
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.22);
+  position: absolute;
+  top: 0;
+  left: -120%;
+
+  width: 70%;
+  height: 100%;
+
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(168,85,247,.12),
+    transparent
+  );
+
+  transform: skewX(-20deg);
+  transition: left .8s ease;
+
+  pointer-events: none;
+}
+
+.download-box:hover::after {
+  left: 130%;
 }
 
 
-/* =================================
-   CARD SHINE
-================================= */
+/* HEADING */
 
-.download-box::before {
-    content: "";
+.download-heading {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 
-    position: absolute;
-
-    top: -20%;
-    left: -120%;
-
-    width: 55%;
-    height: 140%;
-
-    background: linear-gradient(
-        110deg,
-        transparent,
-        rgba(168,85,247,.03),
-        rgba(168,85,247,.16),
-        rgba(216,180,254,.10),
-        transparent
-    );
-
-    transform: skewX(-20deg);
-
-    pointer-events: none;
-
-    animation: boxOuterShine 7s ease-in-out infinite;
+  margin-bottom: 25px;
 }
-
-@keyframes boxOuterShine {
-
-    0% {
-        left: -120%;
-        opacity: 0;
-    }
-
-    15% {
-        opacity: 1;
-    }
-
-    45% {
-        left: 130%;
-        opacity: 1;
-    }
-
-    60%,
-    100% {
-        left: 130%;
-        opacity: 0;
-    }
-}
-
-
-/* =================================
-   ICON
-================================= */
 
 .download-icon {
-    position: relative;
-    z-index: 2;
+  width: 48px;
+  height: 48px;
 
-    width: 50px;
-    height: 50px;
+  display: grid;
+  place-items: center;
 
-    display: grid;
-    place-items: center;
+  flex-shrink: 0;
 
-    margin: 0 auto 15px;
+  border-radius: 14px;
 
-    color: #c99bff;
+  color: #fff;
+  font-size: 25px;
 
-    background: #170d22;
+  background: rgba(168,85,247,.12);
 
-    border: 1px solid #43255d;
-    border-radius: 14px;
+  box-shadow:
+    0 0 22px rgba(168,85,247,.16);
+}
 
-    font-size: 25px;
+.download-heading h2 {
+  margin: 0 0 5px;
 
-    box-shadow:
-        0 0 20px rgba(168,85,247,.08);
+  color: #fff;
+  font-size: 19px;
+}
+
+.download-heading p {
+  margin: 0;
+
+  color: #888;
+  font-size: 13px;
 }
 
 
-/* =================================
-   TEXT
-================================= */
-
-.download-box h2 {
-    position: relative;
-    z-index: 2;
-
-    margin: 0 0 8px;
-
-    color: #f8f5fb;
-
-    font-size: 19px;
-
-    text-shadow:
-        0 0 4px rgba(255,255,255,.45),
-        0 0 10px rgba(255,255,255,.15);
-}
-
-.download-box > p {
-    position: relative;
-    z-index: 2;
-
-    margin: 0 0 22px;
-
-    color: #95899e;
-
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-
-/* =================================
-   INPUT
-================================= */
+/* INPUT */
 
 .download-input {
-    position: relative;
-    z-index: 3;
+  display: flex;
+  gap: 10px;
 
-    display: flex;
-
-    width: 100%;
-
-    gap: 9px;
-
-    margin-bottom: 17px;
+  width: 100%;
+  margin-bottom: 27px;
 }
 
 .download-input input {
-    min-width: 0;
-    flex: 1;
+  flex: 1;
+  min-width: 0;
 
-    height: 57px;
+  height: 54px;
 
-    padding: 0 17px;
+  padding: 0 17px;
 
-    color: #f8f5fb;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 14px;
 
-    background: #0c0811;
+  outline: none;
 
-    border: 1px solid #291a38;
-    border-radius: 14px;
+  color: #fff;
+  background: rgba(0,0,0,.22);
 
-    outline: none;
+  font-size: 14px;
 
-    font-family: Inter, sans-serif;
-    font-size: 13px;
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
 }
 
 .download-input input::placeholder {
-    color: #62586a;
+  color: #666;
 }
 
 .download-input input:focus {
-    border-color: #43255d;
+  border-color: rgba(168,85,247,.45);
 
-    box-shadow:
-        0 0 0 3px rgba(168,85,247,.05);
+  box-shadow:
+    0 0 18px rgba(168,85,247,.08);
 }
 
-.download-input button {
-    flex: 0 0 95px;
+#paste-button {
+  height: 54px;
 
-    height: 57px;
+  padding: 0 19px;
 
-    color: #c99bff;
+  border: 0;
+  border-radius: 14px;
 
-    background: #170d22;
+  color: #ddd;
+  background: rgba(255,255,255,.07);
 
-    border: 1px solid #291a38;
-    border-radius: 14px;
+  cursor: pointer;
 
-    cursor: pointer;
-
-    font-size: 11px;
-    font-weight: 700;
-
-    transition:
-        background .2s ease,
-        border-color .2s ease,
-        transform .2s ease;
+  transition:
+    background .2s ease,
+    color .2s ease;
 }
 
-.download-input button:hover {
-    background: #21112f;
-    border-color: #43255d;
-}
-
-.download-input button:active {
-    transform: scale(.97);
+#paste-button:hover {
+  color: #fff;
+  background: rgba(168,85,247,.18);
 }
 
 
-/* =================================
-   PLATFORM GRID
-================================= */
+/* PLATFORM LABEL */
+
+.platform-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 12px;
+}
+
+.platform-label span {
+  color: #ddd;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.platform-label small {
+  color: #666;
+  font-size: 11px;
+}
+
+
+/* PLATFORMS */
 
 .download-platforms {
-    position: relative;
-    z-index: 3;
+  display: grid;
 
-    display: grid;
+  grid-template-columns:
+    repeat(5, minmax(0, 1fr));
 
-    grid-template-columns:
-        repeat(3, 1fr);
+  gap: 10px;
 
-    gap: 9px;
-
-    margin-bottom: 17px;
+  margin-bottom: 22px;
 }
-
-
-/* =================================
-   PLATFORM BUTTON
-================================= */
 
 .platform-button {
-    position: relative;
+  min-height: 92px;
 
-    min-height: 78px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    display: flex;
+  gap: 5px;
 
-    flex-direction: column;
+  padding: 12px 7px;
 
-    align-items: center;
-    justify-content: center;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 16px;
 
-    gap: 7px;
+  color: #aaa;
+  background: rgba(255,255,255,.025);
 
-    padding: 9px 5px;
+  cursor: pointer;
 
-    color: #95899e;
-
-    background: #100a17;
-
-    border: 1px solid #291a38;
-    border-radius: 14px;
-
-    cursor: pointer;
-
-    overflow: hidden;
-
-    transition:
-        transform .2s ease,
-        color .2s ease,
-        border-color .2s ease,
-        background .2s ease,
-        opacity .2s ease;
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    color .2s ease,
+    box-shadow .2s ease;
 }
-
-.platform-button svg {
-    width: 25px;
-    height: 25px;
-
-    flex-shrink: 0;
-
-    fill: currentColor;
-}
-
-.platform-button > span {
-    font-size: 9px;
-    font-weight: 600;
-}
-
-
-/* =================================
-   ACTIVE / NORMAL
-================================= */
 
 .platform-button:hover:not(:disabled) {
-    color: #c99bff;
+  transform: translateY(-2px);
 
-    border-color: #43255d;
+  color: #fff;
 
-    background: #120c19;
+  background: rgba(168,85,247,.07);
 
-    transform: translateY(-2px);
-}
-
-.platform-button:active:not(:disabled) {
-    transform: scale(.97);
+  box-shadow:
+    0 0 20px rgba(168,85,247,.08);
 }
 
 .platform-button.active {
-    color: #c99bff;
+  color: #fff;
 
-    background: #170d22;
+  background: rgba(168,85,247,.11);
 
-    border-color: #43255d;
-
-    box-shadow:
-        0 0 18px rgba(168,85,247,.07);
+  box-shadow:
+    0 0 24px rgba(168,85,247,.15);
 }
 
+.platform-logo {
+  width: 30px;
+  height: 30px;
 
-/* =================================
-   COMING SOON
-================================= */
+  display: grid;
+  place-items: center;
 
-.platform-button.coming-soon {
-    opacity: .42;
+  color: currentColor;
 
-    cursor: not-allowed;
-
-    filter: grayscale(.25);
+  font-size: 22px;
+  font-weight: 800;
 }
 
-.platform-button.coming-soon:hover {
-    transform: none;
-
-    color: #95899e;
-
-    background: #100a17;
-
-    border-color: #291a38;
+.platform-name {
+  font-size: 12px;
+  font-weight: 700;
 }
 
-.platform-button.coming-soon small {
-    display: block;
-
-    margin-top: -2px;
-
-    color: #a855f7;
-
-    font-size: 7px;
-    font-weight: 700;
-
-    letter-spacing: .4px;
+.platform-button small {
+  color: #666;
+  font-size: 9px;
 }
 
-
-/* =================================
-   DISABLED
-================================= */
+.platform-button.active small {
+  color: #b77aff;
+}
 
 .platform-button:disabled {
-    pointer-events: none;
+  opacity: .42;
+  cursor: not-allowed;
 }
 
 
-/* =================================
-   DOWNLOAD BUTTON
-================================= */
+/* DOWNLOAD */
 
 .download-button {
-    position: relative;
-    z-index: 3;
+  position: relative;
+  z-index: 2;
 
-    width: 100%;
-    height: 50px;
+  width: 100%;
+  height: 55px;
 
-    display: flex;
+  border: 0;
+  border-radius: 15px;
 
-    align-items: center;
-    justify-content: center;
+  color: #fff;
+  background: #a855f7;
 
-    gap: 8px;
+  font-size: 14px;
+  font-weight: 800;
 
-    color: #fff;
+  cursor: pointer;
 
-    background:
-        linear-gradient(
-            135deg,
-            #a855f7,
-            #7c3aed
-        );
+  box-shadow:
+    0 8px 25px rgba(168,85,247,.2);
 
-    border: 1px solid rgba(216,180,254,.5);
-
-    border-radius: 13px;
-
-    cursor: pointer;
-
-    font-size: 13px;
-    font-weight: 700;
-
-    box-shadow:
-        0 0 22px rgba(168,85,247,.2);
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        filter .2s ease,
-        opacity .2s ease;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    opacity .2s ease;
 }
 
 .download-button:hover:not(:disabled) {
-    filter: brightness(1.08);
+  transform: translateY(-2px);
 
-    box-shadow:
-        0 0 30px rgba(168,85,247,.32);
-
-    transform: translateY(-2px);
-}
-
-.download-button:active:not(:disabled) {
-    transform: scale(.98);
+  box-shadow:
+    0 10px 32px rgba(168,85,247,.35);
 }
 
 .download-button:disabled {
-    opacity: .65;
-
-    cursor: wait;
+  opacity: .65;
+  cursor: wait;
 }
 
 .download-button span {
-    font-size: 18px;
+  margin-right: 7px;
 }
 
 
-/* =================================
-   RESULT
-   HIDDEN BY DEFAULT
-================================= */
-
-.download-result {
-    display: none !important;
-}
-
-.download-result[hidden] {
-    display: none !important;
-}
-
-
-/* =================================
-   MESSAGE
-================================= */
+/* MESSAGE */
 
 .download-message {
-    position: relative;
-    z-index: 3;
+  min-height: 20px;
 
-    min-height: 18px;
+  margin-top: 14px;
 
-    margin-top: 11px;
+  text-align: center;
 
-    color: #c99bff;
-
-    font-size: 10px;
-    font-weight: 600;
-
-    line-height: 1.5;
-
-    text-shadow:
-        0 0 8px rgba(168,85,247,.2);
+  color: #888;
+  font-size: 12px;
 }
 
 
-/* =================================
-   AVAILABLE PLATFORMS
-================================= */
+/* SUPPORTED */
 
 .supported-section {
-    margin-top: 35px;
+  margin-top: 70px;
 }
 
-.supported-section > h2,
-.download-info > h2 {
-    margin: 0 0 13px;
+.section-heading {
+  margin-bottom: 20px;
+}
 
-    color: #f8f5fb;
+.section-heading h2,
+.download-info h2 {
+  margin: 0;
 
-    font-size: 16px;
-
-    text-shadow:
-        0 0 4px rgba(255,255,255,.4),
-        0 0 10px rgba(255,255,255,.12);
+  color: #fff;
+  font-size: 22px;
 }
 
 .supported-grid {
-    display: grid;
+  display: grid;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
 
-    gap: 9px;
+  gap: 12px;
 }
 
 .supported-card {
-    display: flex;
+  display: flex;
+  align-items: center;
+  gap: 13px;
 
-    flex-direction: column;
+  padding: 18px;
 
-    align-items: center;
-    justify-content: center;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 17px;
 
-    gap: 7px;
-
-    min-height: 88px;
-
-    color: #95899e;
-
-    background: #100a17;
-
-    border: 1px solid #291a38;
-    border-radius: 13px;
-
-    transition:
-        transform .2s ease,
-        border-color .2s ease,
-        color .2s ease,
-        opacity .2s ease;
+  background: rgba(255,255,255,.025);
 }
 
-.supported-card:hover {
-    transform: translateY(-2px);
+.supported-icon {
+  width: 38px;
+  height: 38px;
 
-    color: #c99bff;
+  display: grid;
+  place-items: center;
 
-    border-color: #43255d;
-}
+  border-radius: 11px;
 
-.supported-logo {
-    width: 25px;
-    height: 25px;
+  color: #fff;
+  background: rgba(168,85,247,.1);
 
-    display: grid;
-    place-items: center;
-}
-
-.supported-logo svg {
-    width: 100%;
-    height: 100%;
-
-    fill: currentColor;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .supported-card strong {
-    font-size: 8px;
+  display: block;
+
+  color: #ddd;
+  font-size: 13px;
 }
 
-.supported-card small {
-    color: #a855f7;
+.status {
+  display: block;
 
-    font-size: 7px;
-    font-weight: 700;
+  margin-top: 4px;
+
+  font-size: 10px;
 }
 
-.coming-soon-card {
-    opacity: .45;
+.status.available {
+  color: #4ade80;
 }
 
-.coming-soon-card:hover {
-    color: #95899e;
-
-    border-color: #291a38;
-
-    transform: none;
+.status.soon {
+  color: #777;
 }
 
 
-/* =================================
-   HOW TO USE
-================================= */
+/* INFO */
 
 .download-info {
-    margin-top: 25px;
-
-    padding: 20px;
-
-    background: rgba(255,255,255,.025);
-
-    border: 1px solid #291a38;
-    border-radius: 15px;
+  margin-top: 70px;
 }
 
-.download-info ol {
-    margin: 0;
+.steps {
+  display: grid;
 
-    padding-left: 20px;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-top: 20px;
 }
 
-.download-info li {
-    margin: 8px 0;
+.step {
+  padding: 18px;
 
-    color: #95899e;
+  border-radius: 16px;
 
-    font-size: 10px;
-    line-height: 1.5;
+  background: rgba(255,255,255,.025);
+}
+
+.step b {
+  color: #a855f7;
+  font-size: 12px;
+}
+
+.step p {
+  margin: 10px 0 0;
+
+  color: #888;
+
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 
-/* =================================
-   FOOTER
-================================= */
+/* FOOTER */
 
 .download-footer {
-    margin-top: 22px;
+  margin-top: 80px;
 
-    text-align: center;
+  text-align: center;
+
+  color: #555;
+  font-size: 11px;
 }
 
 .download-footer p {
-    color: #51465b;
+  margin: 0 0 5px;
+}
 
-    font-size: 8px;
+.download-footer span {
+  color: #444;
 }
 
 
-/* =================================
-   MOBILE
-================================= */
+/* MOBILE */
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
 
-    .download-page {
-        width: calc(100% - 20px);
+  .download-platforms {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
 
-        padding: 38px 0 125px;
-    }
+  .supported-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
 
-    .download-header h1 {
-        font-size: 30px;
-    }
-
-    .download-box {
-        padding: 24px 14px;
-    }
-
-    .download-input {
-        flex-direction: column;
-
-        gap: 9px;
-    }
-
-    .download-input input {
-        width: 100%;
-
-        height: 57px;
-
-        font-size: 14px;
-
-        padding: 0 17px;
-    }
-
-    .download-input button {
-        width: 100%;
-
-        height: 52px;
-
-        flex: none;
-    }
-
-    .download-platforms {
-        grid-template-columns:
-            repeat(2, 1fr);
-
-        gap: 8px;
-    }
-
-    .platform-button {
-        min-height: 82px;
-    }
-
-    .platform-button svg {
-        width: 27px;
-        height: 27px;
-    }
-
-    .platform-button > span {
-        font-size: 9px;
-    }
-
-    .supported-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
+  .steps {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
 }
 
 
-/* =================================
-   SMALL PHONE
-================================= */
+@media (max-width: 520px) {
 
-@media (max-width: 380px) {
+  .download-page {
+    padding: 45px 14px 90px;
+  }
 
-    .download-page {
-        width: calc(100% - 16px);
-    }
+  .download-box {
+    padding: 20px;
+    border-radius: 20px;
+  }
 
-    .download-box {
-        padding: 21px 12px;
-    }
+  .download-input {
+    gap: 7px;
+  }
 
-    .download-platforms {
-        gap: 7px;
-    }
+  .download-input input {
+    height: 50px;
+  }
 
-    .platform-button {
-        min-height: 76px;
-    }
-}
+  #paste-button {
+    height: 50px;
+    padding: 0 14px;
+  }
 
+  .download-platforms {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
 
-/* =================================
-   REDUCED MOTION
-================================= */
+  .supported-grid {
+    grid-template-columns: 1fr;
+  }
 
-@media (prefers-reduced-motion: reduce) {
+  .steps {
+    grid-template-columns: 1fr;
+  }
 
-    .download-header h1,
-    .download-box::before {
-        animation: none;
-    }
+  .download-heading h2 {
+    font-size: 17px;
+  }
 }
