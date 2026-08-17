@@ -1,405 +1,858 @@
 /* =========================================
    GALLEHS PROJECT — DOWNLOAD
+   PREMIUM PURPLE SHINE UI
+========================================= */
+
+:root {
+  --purple: #a855f7;
+  --purple-light: #c084fc;
+  --purple-dark: #7e22ce;
+
+  --white: #ffffff;
+  --text: #e8e8ee;
+  --muted: #8f8f9b;
+  --muted-dark: #5f5f6b;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --glass: rgba(255, 255, 255, 0.035);
+}
+
+
+/* =========================================
+   PAGE
 ========================================= */
 
 .download-page {
   width: 100%;
-  max-width: 1050px;
+  max-width: 1120px;
   margin: auto;
-  padding: 60px 20px 120px;
+
+  padding: 70px 20px 120px;
 }
 
-/* HEADER */
+
+/* =========================================
+   HEADER
+========================================= */
 
 .download-header {
+  position: relative;
+
   text-align: center;
-  margin-bottom: 38px;
+
+  margin-bottom: 44px;
 }
 
-.download-header .eyebrow,
-.section-heading > span,
-.download-info > span {
-  display: block;
-  margin-bottom: 10px;
+.download-header .eyebrow {
+  display: inline-block;
 
-  color: #a855f7;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 4px;
+  margin-bottom: 14px;
+
+  color: var(--purple-light);
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 5px;
+  text-transform: uppercase;
 }
+
+
+/* TITLE */
 
 .download-header h1 {
+  position: relative;
+
+  display: inline-block;
+
   margin: 0;
 
-  color: #fff;
-  font-size: clamp(30px, 5vw, 42px);
-  font-weight: 800;
+  color: #ffffff;
 
-  text-shadow:
-    0 0 7px rgba(255,255,255,.5),
-    0 0 22px rgba(168,85,247,.35);
+  font-size: clamp(34px, 7vw, 58px);
+  font-weight: 900;
+
+  letter-spacing: -2px;
+  line-height: 1.05;
+
+  background: linear-gradient(
+    110deg,
+    #ffffff 10%,
+    #ffffff 35%,
+    #c084fc 50%,
+    #ffffff 65%,
+    #ffffff 90%
+  );
+
+  background-size: 220% auto;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+
+  animation: titleShine 4s linear infinite;
+
+  filter:
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))
+    drop-shadow(0 0 25px rgba(168, 85, 247, 0.35));
 }
+
+
+/* TITLE UNDERLINE */
+
+.download-header h1::after {
+  content: "";
+
+  position: absolute;
+
+  left: 12%;
+  right: 12%;
+
+  bottom: -12px;
+
+  height: 2px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--purple),
+    #ffffff,
+    var(--purple),
+    transparent
+  );
+
+  box-shadow:
+    0 0 10px rgba(168, 85, 247, 0.5),
+    0 0 22px rgba(168, 85, 247, 0.25);
+}
+
+
+@keyframes titleShine {
+  to {
+    background-position: 220% center;
+  }
+}
+
 
 .download-header p {
-  margin: 12px 0 0;
+  max-width: 620px;
 
-  color: #929292;
+  margin: 26px auto 0;
+
+  color: var(--muted);
+
   font-size: 14px;
+
+  line-height: 1.7;
 }
 
 
-/* MAIN BOX */
+/* =========================================
+   MAIN DOWNLOAD BOX
+========================================= */
 
 .download-box {
   position: relative;
 
-  padding: 30px;
-
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 24px;
-
-  background: rgba(255,255,255,.035);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
   overflow: hidden;
+
+  padding: 32px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 28px;
+
+  background:
+    radial-gradient(
+      circle at 50% -20%,
+      rgba(168, 85, 247, 0.13),
+      transparent 45%
+    ),
+    rgba(255, 255, 255, 0.025);
+
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.download-box::after {
+
+/* BOX GLOW */
+
+.download-box::before {
   content: "";
 
   position: absolute;
-  top: 0;
-  left: -120%;
 
-  width: 70%;
-  height: 100%;
+  inset: 0;
 
-  background: linear-gradient(
-    105deg,
-    transparent,
-    rgba(168,85,247,.12),
-    transparent
-  );
+  border-radius: inherit;
 
-  transform: skewX(-20deg);
-  transition: left .8s ease;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.12),
+      transparent 30%,
+      transparent 70%,
+      rgba(168, 85, 247, 0.06)
+    );
 
   pointer-events: none;
 }
 
-.download-box:hover::after {
-  left: 130%;
-}
 
-
-/* HEADING */
+/* =========================================
+   DOWNLOAD HEADING
+========================================= */
 
 .download-heading {
+  position: relative;
+  z-index: 2;
+
   display: flex;
+
   align-items: center;
+
   gap: 15px;
 
-  margin-bottom: 25px;
+  margin-bottom: 27px;
 }
 
+
 .download-icon {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
 
   display: grid;
+
   place-items: center;
 
   flex-shrink: 0;
 
-  border-radius: 14px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
 
-  color: #fff;
-  font-size: 25px;
+  border-radius: 16px;
 
-  background: rgba(168,85,247,.12);
+  color: #ffffff;
+
+  font-size: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(168, 85, 247, 0.2),
+      rgba(168, 85, 247, 0.05)
+    );
 
   box-shadow:
-    0 0 22px rgba(168,85,247,.16);
+    0 0 25px rgba(168, 85, 247, 0.16),
+    inset 0 0 15px rgba(168, 85, 247, 0.05);
 }
+
 
 .download-heading h2 {
   margin: 0 0 5px;
 
-  color: #fff;
-  font-size: 19px;
+  color: #ffffff;
+
+  font-size: 20px;
+
+  font-weight: 850;
 }
+
 
 .download-heading p {
   margin: 0;
 
-  color: #888;
-  font-size: 13px;
+  color: var(--muted-dark);
+
+  font-size: 12px;
 }
 
 
-/* INPUT */
+/* =========================================
+   URL INPUT
+========================================= */
 
 .download-input {
+  position: relative;
+  z-index: 2;
+
   display: flex;
+
   gap: 10px;
 
   width: 100%;
-  margin-bottom: 27px;
+
+  margin-bottom: 30px;
 }
+
 
 .download-input input {
   flex: 1;
+
   min-width: 0;
 
-  height: 54px;
+  height: 56px;
 
-  padding: 0 17px;
+  padding: 0 18px;
 
-  border: 1px solid rgba(255,255,255,.09);
-  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 16px;
 
   outline: none;
 
-  color: #fff;
-  background: rgba(0,0,0,.22);
+  color: #ffffff;
+
+  background: rgba(0, 0, 0, 0.24);
 
   font-size: 14px;
 
   transition:
-    border-color .2s ease,
-    box-shadow .2s ease;
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
 }
+
 
 .download-input input::placeholder {
-  color: #666;
+  color: #5d5d68;
 }
+
+
+.download-input input:hover {
+  border-color: rgba(168, 85, 247, 0.2);
+}
+
 
 .download-input input:focus {
-  border-color: rgba(168,85,247,.45);
+  border-color: rgba(168, 85, 247, 0.55);
+
+  background: rgba(168, 85, 247, 0.025);
 
   box-shadow:
-    0 0 18px rgba(168,85,247,.08);
+    0 0 0 4px rgba(168, 85, 247, 0.06),
+    0 0 28px rgba(168, 85, 247, 0.1);
 }
 
+
+/* PASTE BUTTON */
+
 #paste-button {
-  height: 54px;
+  height: 56px;
 
-  padding: 0 19px;
+  padding: 0 20px;
 
-  border: 0;
-  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 
-  color: #ddd;
-  background: rgba(255,255,255,.07);
+  border-radius: 16px;
+
+  color: #dddddf;
+
+  background: rgba(255, 255, 255, 0.045);
 
   cursor: pointer;
 
   transition:
-    background .2s ease,
-    color .2s ease;
+    transform 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
 
 #paste-button:hover {
-  color: #fff;
-  background: rgba(168,85,247,.18);
+  transform: translateY(-2px);
+
+  color: #ffffff;
+
+  border-color: rgba(168, 85, 247, 0.3);
+
+  background: rgba(168, 85, 247, 0.12);
+
+  box-shadow:
+    0 8px 22px rgba(168, 85, 247, 0.1);
 }
 
 
-/* PLATFORM LABEL */
+/* =========================================
+   PLATFORM LABEL
+========================================= */
 
 .platform-label {
+  position: relative;
+  z-index: 2;
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
-  margin-bottom: 12px;
+  margin-bottom: 13px;
 }
 
+
 .platform-label span {
-  color: #ddd;
+  color: #dddddf;
+
   font-size: 12px;
-  font-weight: 700;
+
+  font-weight: 800;
+
   letter-spacing: 1px;
 }
 
+
 .platform-label small {
-  color: #666;
-  font-size: 11px;
+  color: #5e5e69;
+
+  font-size: 10px;
 }
 
 
-/* PLATFORMS */
+/* =========================================
+   PLATFORM GRID
+========================================= */
 
 .download-platforms {
+  position: relative;
+  z-index: 2;
+
   display: grid;
 
   grid-template-columns:
     repeat(5, minmax(0, 1fr));
 
-  gap: 10px;
+  gap: 12px;
 
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
+
+/* =========================================
+   PLATFORM CARD
+========================================= */
+
 .platform-button {
-  min-height: 92px;
+  position: relative;
+
+  overflow: hidden;
+
+  min-height: 105px;
 
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   justify-content: center;
 
-  gap: 5px;
+  gap: 7px;
 
-  padding: 12px 7px;
+  padding: 14px 8px;
 
-  border: 1px solid rgba(255,255,255,.07);
-  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
-  color: #aaa;
-  background: rgba(255,255,255,.025);
+  border-radius: 18px;
+
+  color: #9696a2;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.015)
+    );
 
   cursor: pointer;
 
   transition:
-    transform .2s ease,
-    background .2s ease,
-    color .2s ease,
-    box-shadow .2s ease;
+    transform 0.28s ease,
+    border-color 0.28s ease,
+    background 0.28s ease,
+    box-shadow 0.28s ease,
+    color 0.28s ease;
 }
+
+
+/* =========================================
+   MOVING SHINE
+========================================= */
+
+.platform-button::before {
+  content: "";
+
+  position: absolute;
+
+  top: -100%;
+  left: -140%;
+
+  width: 70%;
+  height: 300%;
+
+  transform: rotate(20deg);
+
+  background:
+    linear-gradient(
+      100deg,
+      transparent,
+      rgba(255, 255, 255, 0.02) 38%,
+      rgba(255, 255, 255, 0.24) 50%,
+      rgba(255, 255, 255, 0.02) 62%,
+      transparent
+    );
+
+  transition: left 0.85s ease;
+
+  pointer-events: none;
+}
+
+
+.platform-button:hover::before {
+  left: 160%;
+}
+
+
+/* =========================================
+   PURPLE CARD GLOW
+========================================= */
+
+.platform-button::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: inherit;
+
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(168, 85, 247, 0.15),
+      transparent 55%
+    );
+
+  opacity: 0;
+
+  transition: opacity 0.3s ease;
+
+  pointer-events: none;
+}
+
+
+.platform-button:hover::after,
+.platform-button.active::after {
+  opacity: 1;
+}
+
+
+/* HOVER */
 
 .platform-button:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform: translateY(-5px);
 
-  color: #fff;
+  color: #ffffff;
 
-  background: rgba(168,85,247,.07);
+  border-color: rgba(168, 85, 247, 0.35);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(168, 85, 247, 0.12),
+      rgba(255, 255, 255, 0.035)
+    );
 
   box-shadow:
-    0 0 20px rgba(168,85,247,.08);
+    0 15px 35px rgba(0, 0, 0, 0.25),
+    0 0 28px rgba(168, 85, 247, 0.12);
 }
+
+
+/* ACTIVE */
 
 .platform-button.active {
-  color: #fff;
+  color: #ffffff;
 
-  background: rgba(168,85,247,.11);
+  border-color: rgba(168, 85, 247, 0.55);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(168, 85, 247, 0.18),
+      rgba(168, 85, 247, 0.045)
+    );
 
   box-shadow:
-    0 0 24px rgba(168,85,247,.15);
+    0 0 30px rgba(168, 85, 247, 0.17),
+    inset 0 0 20px rgba(168, 85, 247, 0.05);
 }
 
+
+/* =========================================
+   PLATFORM LOGO
+========================================= */
+
 .platform-logo {
-  width: 30px;
-  height: 30px;
+  position: relative;
+
+  z-index: 2;
+
+  width: 42px;
+  height: 42px;
 
   display: grid;
+
   place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 13px;
 
   color: currentColor;
 
+  background: rgba(255, 255, 255, 0.045);
+
   font-size: 22px;
-  font-weight: 800;
+
+  font-weight: 900;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.18);
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
 }
+
+
+.platform-button:hover .platform-logo,
+.platform-button.active .platform-logo {
+  transform: scale(1.1);
+
+  background: rgba(168, 85, 247, 0.13);
+
+  box-shadow:
+    0 0 24px rgba(168, 85, 247, 0.2);
+}
+
+
+.platform-name,
+.platform-button small {
+  position: relative;
+
+  z-index: 2;
+}
+
 
 .platform-name {
   font-size: 12px;
-  font-weight: 700;
+
+  font-weight: 800;
 }
 
+
 .platform-button small {
-  color: #666;
+  color: #5f5f6b;
+
   font-size: 9px;
 }
 
+
 .platform-button.active small {
-  color: #b77aff;
+  color: var(--purple-light);
 }
 
+
 .platform-button:disabled {
-  opacity: .42;
+  opacity: 0.38;
+
   cursor: not-allowed;
 }
 
 
-/* DOWNLOAD */
+/* =========================================
+   DOWNLOAD BUTTON
+========================================= */
 
 .download-button {
   position: relative;
+
+  overflow: hidden;
+
   z-index: 2;
 
   width: 100%;
-  height: 55px;
 
-  border: 0;
-  border-radius: 15px;
+  height: 58px;
 
-  color: #fff;
-  background: #a855f7;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 17px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7e22ce,
+      #a855f7,
+      #9333ea
+    );
 
   font-size: 14px;
-  font-weight: 800;
+
+  font-weight: 900;
 
   cursor: pointer;
 
   box-shadow:
-    0 8px 25px rgba(168,85,247,.2);
+    0 12px 35px rgba(168, 85, 247, 0.24);
 
   transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    opacity .2s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
 }
+
+
+/* DOWNLOAD SHINE */
+
+.download-button::before {
+  content: "";
+
+  position: absolute;
+
+  top: -100%;
+  left: -130%;
+
+  width: 60%;
+  height: 300%;
+
+  transform: rotate(20deg);
+
+  background:
+    linear-gradient(
+      100deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+
+  transition: left 0.8s ease;
+}
+
+
+.download-button:hover::before {
+  left: 160%;
+}
+
 
 .download-button:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+
+  filter: brightness(1.08);
 
   box-shadow:
-    0 10px 32px rgba(168,85,247,.35);
+    0 16px 45px rgba(168, 85, 247, 0.36),
+    0 0 30px rgba(168, 85, 247, 0.15);
 }
 
+
+.download-button:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+
 .download-button:disabled {
-  opacity: .65;
+  opacity: 0.6;
+
   cursor: wait;
 }
 
+
 .download-button span {
+  position: relative;
+
+  z-index: 2;
+
   margin-right: 7px;
 }
 
 
-/* MESSAGE */
+/* =========================================
+   MESSAGE
+========================================= */
 
 .download-message {
   min-height: 20px;
 
-  margin-top: 14px;
+  margin-top: 15px;
 
   text-align: center;
 
-  color: #888;
+  color: #777783;
+
   font-size: 12px;
 }
 
 
-/* SUPPORTED */
+/* =========================================
+   SUPPORTED SECTION
+========================================= */
 
-.supported-section {
-  margin-top: 70px;
+.supported-section,
+.download-info {
+  margin-top: 78px;
 }
+
 
 .section-heading {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
+
+
+.section-heading > span,
+.download-info > span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--purple-light);
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+  letter-spacing: 4px;
+}
+
 
 .section-heading h2,
 .download-info h2 {
   margin: 0;
 
-  color: #fff;
-  font-size: 22px;
+  color: #ffffff;
+
+  font-size: 25px;
+
+  font-weight: 850;
 }
+
+
+/* =========================================
+   SUPPORTED CARDS
+========================================= */
 
 .supported-grid {
   display: grid;
@@ -407,67 +860,148 @@
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 12px;
+  gap: 13px;
 }
+
 
 .supported-card {
+  position: relative;
+
+  overflow: hidden;
+
   display: flex;
+
   align-items: center;
-  gap: 13px;
 
-  padding: 18px;
+  gap: 14px;
 
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 17px;
+  padding: 19px;
 
-  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(255, 255, 255, 0.065);
+
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
+
+
+/* SUPPORTED SHINE */
+
+.supported-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: -100%;
+  left: -140%;
+
+  width: 65%;
+  height: 300%;
+
+  transform: rotate(20deg);
+
+  background:
+    linear-gradient(
+      100deg,
+      transparent,
+      rgba(255, 255, 255, 0.16),
+      transparent
+    );
+
+  transition: left 0.8s ease;
+}
+
+
+.supported-card:hover::before {
+  left: 160%;
+}
+
+
+.supported-card:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(168, 85, 247, 0.24);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.22),
+    0 0 24px rgba(168, 85, 247, 0.08);
+}
+
+
+/* SUPPORTED ICON */
 
 .supported-icon {
-  width: 38px;
-  height: 38px;
+  position: relative;
+
+  z-index: 2;
+
+  width: 43px;
+  height: 43px;
 
   display: grid;
+
   place-items: center;
 
-  border-radius: 11px;
+  flex-shrink: 0;
 
-  color: #fff;
-  background: rgba(168,85,247,.1);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+
+  border-radius: 13px;
+
+  color: #ffffff;
+
+  background: rgba(168, 85, 247, 0.09);
 
   font-size: 18px;
-  font-weight: 800;
+
+  font-weight: 900;
 }
+
+
+.supported-card strong,
+.status {
+  position: relative;
+
+  z-index: 2;
+}
+
 
 .supported-card strong {
   display: block;
 
-  color: #ddd;
+  color: #e1e1e7;
+
   font-size: 13px;
 }
+
 
 .status {
   display: block;
 
-  margin-top: 4px;
+  margin-top: 5px;
 
   font-size: 10px;
 }
+
 
 .status.available {
   color: #4ade80;
 }
 
+
 .status.soon {
-  color: #777;
+  color: #686873;
 }
 
 
-/* INFO */
-
-.download-info {
-  margin-top: 70px;
-}
+/* =========================================
+   STEPS
+========================================= */
 
 .steps {
   display: grid;
@@ -475,57 +1009,90 @@
   grid-template-columns:
     repeat(4, minmax(0, 1fr));
 
-  gap: 12px;
+  gap: 13px;
 
-  margin-top: 20px;
+  margin-top: 22px;
 }
+
 
 .step {
-  padding: 18px;
+  position: relative;
 
-  border-radius: 16px;
+  overflow: hidden;
 
-  background: rgba(255,255,255,.025);
+  padding: 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.055);
+
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
+
+
+.step:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(168, 85, 247, 0.2);
+
+  box-shadow:
+    0 12px 28px rgba(168, 85, 247, 0.07);
+}
+
 
 .step b {
-  color: #a855f7;
+  color: var(--purple-light);
+
   font-size: 12px;
 }
+
 
 .step p {
   margin: 10px 0 0;
 
-  color: #888;
+  color: #777783;
 
   font-size: 12px;
-  line-height: 1.6;
+
+  line-height: 1.7;
 }
 
 
-/* FOOTER */
+/* =========================================
+   FOOTER
+========================================= */
 
 .download-footer {
-  margin-top: 80px;
+  margin-top: 90px;
 
   text-align: center;
 
-  color: #555;
+  color: #50505b;
+
   font-size: 11px;
 }
 
+
 .download-footer p {
-  margin: 0 0 5px;
+  margin: 0 0 6px;
 }
+
 
 .download-footer span {
-  color: #444;
+  color: #3e3e48;
 }
 
 
-/* MOBILE */
+/* =========================================
+   TABLET
+========================================= */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
 
   .download-platforms {
     grid-template-columns:
@@ -544,39 +1111,47 @@
 }
 
 
-@media (max-width: 520px) {
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 560px) {
 
   .download-page {
-    padding: 45px 14px 90px;
+    padding: 48px 14px 90px;
+  }
+
+  .download-header h1 {
+    font-size: 36px;
   }
 
   .download-box {
     padding: 20px;
-    border-radius: 20px;
+
+    border-radius: 22px;
   }
 
   .download-input {
-    gap: 7px;
+    flex-direction: column;
   }
 
-  .download-input input {
-    height: 50px;
-  }
-
+  .download-input input,
   #paste-button {
-    height: 50px;
-    padding: 0 14px;
+    width: 100%;
   }
 
   .download-platforms {
     grid-template-columns:
       repeat(2, 1fr);
+
+    gap: 9px;
   }
 
-  .supported-grid {
-    grid-template-columns: 1fr;
+  .platform-button {
+    min-height: 100px;
   }
 
+  .supported-grid,
   .steps {
     grid-template-columns: 1fr;
   }
@@ -584,4 +1159,22 @@
   .download-heading h2 {
     font-size: 17px;
   }
+
+  .section-heading h2,
+  .download-info h2 {
+    font-size: 21px;
+  }
 }
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+   }
