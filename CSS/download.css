@@ -1178,3 +1178,106 @@
     transition: none !important;
   }
    }
+/* =========================================
+   REAL PLATFORM SVG LOGOS
+========================================= */
+
+.platform-logo {
+  position: relative;
+  z-index: 3;
+
+  width: 44px;
+  height: 44px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 13px;
+
+  background: rgba(255,255,255,.045);
+
+  color: #fff;
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    background .3s ease;
+}
+
+.platform-logo svg {
+  width: 24px;
+  height: 24px;
+
+  display: block;
+
+  fill: currentColor;
+}
+
+.platform-button:hover .platform-logo,
+.platform-button.active .platform-logo {
+  transform: scale(1.1);
+
+  background: rgba(168,85,247,.13);
+
+  box-shadow:
+    0 0 24px rgba(168,85,247,.25);
+}
+
+
+/* AUTO */
+
+.logo-auto {
+  color: #c084fc;
+}
+
+.logo-auto svg {
+  width: 25px;
+  height: 25px;
+}
+
+
+/* TIKTOK */
+
+.logo-tiktok {
+  color: #fff;
+}
+
+
+/* YOUTUBE */
+
+.logo-youtube {
+  color: #fff;
+}
+
+
+/* INSTAGRAM */
+
+.logo-instagram {
+  color: #fff;
+}
+
+.logo-instagram svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.logo-instagram svg circle:last-child {
+  fill: currentColor;
+  stroke: none;
+}
+
+
+/* FACEBOOK */
+
+.logo-facebook {
+  color: #fff;
+}
+
+
+/* X */
+
+.logo-x {
+  color: #fff;
+}
