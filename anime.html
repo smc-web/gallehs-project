@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#09070f">
+  <title>Anime — Gallehs Project</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/anime.css">
+</head>
+
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="noise"></div>
+
+  <main class="anime-page">
+
+    <header class="anime-header">
+      <a class="back-btn" href="index.html" aria-label="Kembali">
+        <span>←</span>
+        <span>Kembali</span>
+      </a>
+
+      <div class="brand">
+        <span class="brand-mark">✦</span>
+        <div>
+          <p class="eyebrow">GALLEHS PROJECT</p>
+          <h1>ANIME</h1>
+        </div>
+      </div>
+
+      <div class="header-badge">ANIME HUB</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="hero-kicker">DISCOVER • IDENTIFY • EXPLORE</p>
+        <h2>Temukan dunia anime<br><span>dalam satu tempat.</span></h2>
+        <p class="hero-desc">
+          Cari anime berdasarkan judul, cek screenshot, lihat karakter populer,
+          atau dapatkan gambar anime acak.
+        </p>
+      </div>
+    </section>
+
+    <nav class="anime-tabs" aria-label="Menu Anime">
+      <button class="anime-tab active" data-panel="search-panel" type="button">
+        <span>🔎</span><b>Cari Anime</b>
+      </button>
+      <button class="anime-tab" data-panel="screenshot-panel" type="button">
+        <span>🖼️</span><b>Screenshot</b>
+      </button>
+      <button class="anime-tab" data-panel="top-panel" type="button">
+        <span>🏆</span><b>Top Anime</b>
+      </button>
+      <button class="anime-tab" data-panel="random-panel" type="button">
+        <span>🌸</span><b>Random</b>
+      </button>
+    </nav>
+
+    <section id="search-panel" class="panel active-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="panel-kicker">SEARCH</p>
+          <h3>Cari Anime</h3>
+          <p>Masukkan judul anime yang ingin kamu cari.</p>
+        </div>
+      </div>
+
+      <form id="anime-search-form" class="search-box">
+        <input id="anime-search" type="search" autocomplete="off"
+          placeholder="Contoh: One Piece" aria-label="Cari anime">
+        <button id="anime-search-btn" type="submit">Search</button>
+      </form>
+
+      <p id="anime-message" class="status-message">Masukkan judul anime untuk mulai mencari.</p>
+      <div id="anime-results" class="anime-grid"></div>
+    </section>
+
+    <section id="screenshot-panel" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="panel-kicker">ANIME CHECKER</p>
+          <h3>Anime dari Screenshot</h3>
+          <p>Upload screenshot adegan anime untuk mencoba mengenali judulnya.</p>
+        </div>
+      </div>
+
+      <div id="drop-zone" class="upload-zone">
+        <input id="anime-image-input" type="file" accept="image/*" hidden>
+        <div class="upload-icon">🖼️</div>
+        <h4>Upload screenshot</h4>
+        <p>Klik untuk memilih gambar atau drag & drop ke sini.</p>
+        <button id="choose-image-btn" type="button">Pilih Gambar</button>
+      </div>
+
+      <div id="image-preview-wrap" class="preview-wrap hidden">
+        <img id="image-preview" alt="Preview screenshot">
+        <div class="preview-actions">
+          <button id="check-image-btn" class="primary-btn" type="button">🔍 Cek Anime</button>
+          <button id="clear-image-btn" class="ghost-btn" type="button">Hapus</button>
+        </div>
+      </div>
+
+      <div id="screenshot-message" class="status-message"></div>
+      <div id="screenshot-result" class="checker-result"></div>
+    </section>
+
+    <section id="top-panel" class="panel">
+      <div class="panel-heading panel-heading-row">
+        <div>
+          <p class="panel-kicker">RANKING</p>
+          <h3>Top Anime Characters</h3>
+          <p>Daftar karakter populer dari sumber Top Anime bot Gallehs.</p>
+        </div>
+        <button id="top-refresh-btn" class="small-btn" type="button">↻ Refresh</button>
+      </div>
+
+      <p id="top-message" class="status-message"></p>
+      <div id="top-results" class="top-list"></div>
+    </section>
+
+    <section id="random-panel" class="panel">
+      <div class="panel-heading panel-heading-row">
+        <div>
+          <p class="panel-kicker">RANDOM</p>
+          <h3>Random Anime</h3>
+          <p>Ambil gambar anime SFW secara acak.</p>
+        </div>
+        <button id="random-btn" class="small-btn" type="button">🌸 Random</button>
+      </div>
+
+      <p id="random-message" class="status-message"></p>
+      <div id="random-result" class="random-card"></div>
+    </section>
+
+    <footer class="anime-footer">
+      <span>GALLEHS PROJECT</span>
+      <span>•</span>
+      <span>Anime Hub</span>
+    </footer>
+  </main>
+
+  <script src="js/search.js" defer></script>
+  <script src="js/screenshot.js" defer></script>
+  <script src="js/top.js" defer></script>
+  <script src="js/random.js" defer></script>
+
+  <script>
+    document.querySelectorAll(".anime-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".anime-tab").forEach(x => x.classList.remove("active"));
+        document.querySelectorAll(".panel").forEach(x => x.classList.remove("active-panel"));
+        tab.classList.add("active");
+        document.getElementById(tab.dataset.panel).classList.add("active-panel");
+      });
+    });
+  </script>
+</body>
+</html>
